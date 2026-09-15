@@ -73,6 +73,50 @@ body {
   gap: 6%;
 
   padding: 120px 5% 60px;
+
+  background-color: #111827;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Blurred Background Image */
+
+.hero::before {
+  content: "";
+
+  position: absolute;
+  inset: -5px;
+
+  background-image: url("./assets/hero-road.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: blur(2px);
+
+  z-index: 0;
+}
+
+/* Dark Overlay */
+
+.hero::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  z-index: 0;
+}
+
+/* Keep Content Above Background */
+
+.search-card,
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
 
 /* ================= SEARCH CARD ================= */
@@ -88,16 +132,22 @@ body {
   border-radius: 14px;
 
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+
+  text-align: left;
 }
 
 .search-card h2 {
   font-size: 23px;
   margin-bottom: 24px;
   color: #111827;
+
+  text-align: left;
 }
 
 .form-group {
   margin-bottom: 16px;
+
+  text-align: left;
 }
 
 .form-group label {
@@ -109,6 +159,8 @@ body {
   font-weight: 600;
 
   color: #244a96;
+
+  text-align: left;
 }
 
 .form-group input,
@@ -127,6 +179,8 @@ body {
   background: #f5f7fa;
 
   outline: none;
+
+  text-align: left;
 }
 
 .form-group input:focus,
@@ -139,7 +193,9 @@ body {
 
 .date-row {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 12px;
 }
 
@@ -172,32 +228,43 @@ body {
 
 .hero-content {
   flex: 1;
+
   color: white;
+
+  text-align: left;
 }
 
 .hero-content h1 {
   font-size: clamp(45px, 5vw, 76px);
+
   line-height: 1.08;
+
   font-weight: 800;
 
   margin-bottom: 22px;
+
+  text-align: left;
 }
 
 .hero-content p {
   max-width: 650px;
 
   font-size: 18px;
+
   line-height: 1.6;
 
   color: #e0e4eb;
 
   margin-bottom: 30px;
+
+  text-align: left;
 }
 
 /* ================= FEATURES ================= */
 
 .feature-bar {
   display: flex;
+
   align-items: center;
 
   width: fit-content;
@@ -211,11 +278,13 @@ body {
 
 .feature {
   display: flex;
+
   align-items: center;
 
   gap: 9px;
 
   font-size: 14px;
+
   font-weight: 600;
 
   white-space: nowrap;
@@ -225,11 +294,13 @@ body {
   color: #ffc400;
 
   font-size: 21px;
+
   font-weight: bold;
 }
 
 .divider {
   width: 1px;
+
   height: 25px;
 
   background: rgba(255, 255, 255, 0.4);
@@ -240,25 +311,85 @@ body {
 /* ================= TABLET ================= */
 
 @media (max-width: 1000px) {
+
   .hero {
-    gap: 35px;
+    min-height: 100vh;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 30px;
+
+    padding: 110px 30px 50px;
+
+    text-align: center;
   }
 
-  .search-card {
-    width: 350px;
+  /* ---------- HERO CONTENT ---------- */
+
+  .hero-content {
+    order: 1;
+
+    width: 100%;
+
+    text-align: center;
   }
 
   .hero-content h1 {
-    font-size: 48px;
+    font-size: clamp(42px, 6vw, 58px);
+
+    line-height: 1.1;
+
+    margin-bottom: 18px;
+
+    text-align: center;
   }
+
+  .hero-content p {
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    font-size: 17px;
+
+    color: #e0e4eb;
+
+    text-align: center;
+  }
+
+  /* ---------- SEARCH CARD ---------- */
+
+  .search-card {
+    order: 2;
+
+    width: min(100%, 500px);
+
+    text-align: left;
+  }
+
+  .search-card h2 {
+    text-align: left;
+  }
+
+  .form-group {
+    text-align: left;
+  }
+
+  .form-group label {
+    text-align: left;
+  }
+
+  .form-group input,
+  .form-group select {
+    text-align: left;
+  }
+
+  /* ---------- HIDE FEATURES ---------- */
 
   .feature-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .divider {
     display: none;
   }
 }
@@ -266,12 +397,16 @@ body {
 /* ================= MOBILE ================= */
 
 @media (max-width: 700px) {
+
   .home-page {
     background-color: #f4f7fb;
   }
 
+  /* ---------- NAVBAR ---------- */
+
   .navbar {
     height: 64px;
+
     padding: 0 20px;
 
     background: white;
@@ -279,70 +414,114 @@ body {
 
   .logo {
     color: #123c9c;
+
     font-size: 24px;
   }
 
   .login-btn {
     background: #123c9c;
+
     color: white;
 
     padding: 9px 20px;
   }
 
+  /* ---------- HERO ---------- */
+
   .hero {
     min-height: 100vh;
 
     flex-direction: column;
-    align-items: stretch;
+
+    align-items: center;
 
     padding: 95px 18px 35px;
 
-    gap: 35px;
+    gap: 28px;
+
+    text-align: center;
   }
+
+  /* ---------- HERO CONTENT ---------- */
 
   .hero-content {
     order: 1;
 
+    width: 100%;
+
     text-align: center;
-    color: #111827;
+
+    color: white;
   }
+
+  .hero-content h1 {
+    font-size: clamp(32px, 9vw, 42px);
+
+    line-height: 1.12;
+
+    margin-bottom: 16px;
+
+    text-align: center;
+  }
+
+  .hero-content p {
+    max-width: 500px;
+
+    margin: 0 auto;
+
+    font-size: clamp(14px, 4vw, 16px);
+
+    line-height: 1.55;
+
+    color: white;
+
+    text-align: center;
+  }
+
+  /* ---------- SEARCH CARD ---------- */
 
   .search-card {
     order: 2;
 
     width: 100%;
+
     padding: 22px;
+
+    text-align: left;
   }
 
-  .hero-content h1 {
-    font-size: 38px;
-    line-height: 1.15;
+  .search-card h2 {
+    text-align: left;
   }
 
-  .hero-content p {
-    font-size: 15px;
-    color: #5b6472;
+  .form-group {
+    text-align: left;
   }
+
+  .form-group label {
+    text-align: left;
+  }
+
+  .form-group input,
+  .form-group select {
+    text-align: left;
+  }
+
+  /* ---------- FEATURES HIDDEN ---------- */
 
   .feature-bar {
-    width: 100%;
-
-    flex-direction: column;
-
-    margin: 0 auto;
-
-    background: #e9eef7;
-
-    color: #26354d;
-
-    gap: 10px;
+    display: none;
   }
+
+  /* ---------- DATE ---------- */
 
   .date-row {
     grid-template-columns: 1fr;
+
     gap: 0;
   }
 }
+
 
 /* ================= RENTAL PARTNERS ================= */
 
@@ -391,6 +570,13 @@ body {
   border-radius: 8px;
 
   transition: 0.2s ease;
+}
+.partner-logo img {
+  max-width: 75px;
+  max-height: 32px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 
 .partner-logo:hover {

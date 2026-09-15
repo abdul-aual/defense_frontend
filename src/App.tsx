@@ -1,5 +1,16 @@
 import { useState } from "react";
 import "./App.css";
+import sixtLogo from "./assets/partners/sixt.png";
+import dollarLogo from "./assets/partners/dollar.gif";
+import budgetLogo from "./assets/partners/budget.png";
+import nationalLogo from "./assets/partners/national.png";
+import enterpriseLogo from "./assets/partners/enterprise.png";
+import avisLogo from "./assets/partners/avis.png";
+import hertzLogo from "./assets/partners/hertz.png";
+import aceLogo from "./assets/partners/ace.png";
+import alamoLogo from "./assets/partners/alamo.png";
+import europcarLogo from "./assets/partners/europcar.png";
+import bestDealBanners from "./assets/banners/bestDealBanner.png";
 
 
 type FAQItemProps = {
@@ -259,43 +270,43 @@ function App() {
 <div className="partners-grid">
 
   <div className="partner-logo">
-    <span>SIXT</span>
+    <img src={sixtLogo} alt="SIXT" />
   </div>
 
   <div className="partner-logo">
-    <span>Dollar</span>
+    <img src={dollarLogo} alt="Dollar" />
   </div>
 
   <div className="partner-logo">
-    <span>Budget</span>
+    <img src={budgetLogo} alt="Budget" />
   </div>
 
   <div className="partner-logo">
-    <span>National</span>
+    <img src={nationalLogo} alt="National" />
   </div>
 
   <div className="partner-logo">
-    <span>Enterprise</span>
+    <img src={enterpriseLogo} alt="enterprise" />
   </div>
 
   <div className="partner-logo">
-    <span>Avis</span>
+    <img src={avisLogo} alt="avis" />
   </div>
 
   <div className="partner-logo">
-    <span>Hertz</span>
+    <img src={hertzLogo} alt="hertz" />
   </div>
 
   <div className="partner-logo">
-    <span>ACE</span>
+    <img src={aceLogo} alt="ace" />
   </div>
 
   <div className="partner-logo">
-    <span>Alamo</span>
+    <img src={alamoLogo} alt="alamo" />
   </div>
 
   <div className="partner-logo">
-    <span>Europcar</span>
+    <img src={europcarLogo} alt="europcar" />
   </div>
 
 </div>
@@ -833,7 +844,7 @@ function App() {
     <div className="compare-banner-center">
 
       <img
-        src="https://i.ibb.co/3ykXgB7/man-holding-cars.png"
+        src={bestDealBanners}
         alt="Rentwise vehicle rental"
         onError={(e) => {
           e.currentTarget.style.display = "none";
