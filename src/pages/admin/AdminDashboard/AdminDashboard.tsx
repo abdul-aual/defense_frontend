@@ -5,6 +5,7 @@ import "./AdminDashboard.css";
 import AdminManagement from "./components/AdminManagement";
 import ViewCustomer from "./components/ViewCustomer";
 import VehicleManagement from "./components/VehicleManagement";
+import ChangePassword from "./components/ChangePassword";
 
 interface Admin {
   id: number;
@@ -17,7 +18,8 @@ type ActiveSection =
   | "dashboard"
   | "vehicle-management"
   | "admin-management"
-  | "view-customer";
+  | "view-customer"
+  | "profile";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -93,6 +95,9 @@ function AdminDashboard() {
 
       case "view-customer":
         return "View Customers";
+
+      case "profile":
+        return "Profile";
 
       default:
         return "Dashboard";
@@ -226,14 +231,18 @@ function AdminDashboard() {
           {/* ================= PROFILE ================= */}
 
           <button
-            className="sidebar-item"
+            className={`sidebar-item ${
+              activeSection === "profile"
+                ? "active"
+                : ""
+            }`}
             type="button"
             onClick={() =>
-              setActiveSection("dashboard")
+              setActiveSection("profile")
             }
           >
             <span>⚙</span>
-            Profile
+            Update Profile
           </button>
 
         </nav>
@@ -517,6 +526,14 @@ function AdminDashboard() {
           />
         )}
 
+        {/* ===================================================
+            PROFILE
+        =================================================== */}
+
+        {activeSection === "profile" && (
+          <ChangePassword />
+        )}
+
       </main>
 
     </div>
@@ -524,3 +541,4 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
+

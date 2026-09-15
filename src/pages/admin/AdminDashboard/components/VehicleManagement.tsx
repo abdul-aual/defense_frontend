@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./VehicleManagement.css";
-
 interface Vehicle {
   id: number;
   vehicle_name: string;
