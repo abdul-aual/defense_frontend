@@ -1,0 +1,403 @@
+.create-account-page {
+    min-height: 100vh;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding: 100px 20px 40px;
+  
+    background:
+      linear-gradient(
+        rgba(10, 18, 32, 0.88),
+        rgba(18, 32, 55, 0.94)
+      ),
+      url("../assets/hero-road.jpg");
+  
+    background-size: cover;
+    background-position: center;
+  
+    position: relative;
+  }
+  
+  .create-account-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #123c9c, #2563eb);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .create-account-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(18, 60, 156, 0.25);
+  }
+  
+  .create-account-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .create-account-card {
+    width: 100%;
+    max-width: 460px;
+  
+    background: white;
+  
+    padding: 38px 40px;
+  
+    border-radius: 16px;
+  
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.35);
+  
+    text-align: left;
+  }
+  
+  .create-account-logo {
+    text-align: center;
+  
+    color: #123c9c;
+  
+    font-size: 30px;
+    font-weight: 800;
+  
+    margin-bottom: 20px;
+  }
+  
+  .create-account-card h1 {
+    text-align: center;
+  
+    color: #111827;
+  
+    font-size: 28px;
+  
+    margin-bottom: 8px;
+  }
+  
+  .create-account-subtitle {
+    text-align: center;
+  
+    color: #6b7280;
+  
+    font-size: 14px;
+  
+    line-height: 1.5;
+  
+    margin-bottom: 28px;
+  }
+  
+  /* ================= FORM ================= */
+  
+  .create-form-group {
+    margin-bottom: 17px;
+  }
+  
+  .create-form-group label {
+    display: block;
+  
+    color: #244a96;
+  
+    font-size: 14px;
+  
+    font-weight: 600;
+  
+    margin-bottom: 7px;
+  }
+  
+  .required-star {
+    color: #dc2626;
+  
+    font-size: 13px;
+  
+    margin-left: 2px;
+  }
+  
+  .optional-text {
+    color: #9ca3af;
+  
+    font-size: 12px;
+  
+    font-weight: 400;
+  
+    margin-left: 3px;
+  }
+  
+  .create-form-group input {
+    width: 100%;
+    height: 48px;
+  
+    border: 1px solid #dce3ec;
+  
+    border-radius: 9px;
+  
+    padding: 0 14px;
+  
+    background: #f5f7fa;
+  
+    color: #333;
+  
+    font-size: 14px;
+  
+    outline: none;
+  
+    transition: 0.2s;
+  }
+  
+  .create-form-group input:focus {
+    border-color: #1769e0;
+  
+    background: white;
+  
+    box-shadow:
+      0 0 0 3px rgba(23, 105, 224, 0.08);
+  }
+  
+  .create-form-group input::placeholder {
+    color: #9ca3af;
+  }
+  
+  /* ================= ERROR ================= */
+  
+  .form-error {
+    margin-top: 5px;
+  
+    color: #dc2626;
+  
+    font-size: 12px;
+  
+    line-height: 1.4;
+  }
+  
+  /* ================= BUTTON ================= */
+  
+  .create-account-submit {
+    width: 100%;
+    height: 50px;
+  
+    margin-top: 5px;
+  
+    border: none;
+  
+    border-radius: 9px;
+  
+    background:
+      linear-gradient(
+        90deg,
+        #0969e8,
+        #1510b8
+      );
+  
+    color: white;
+  
+    font-size: 16px;
+  
+    font-weight: 700;
+  
+    cursor: pointer;
+  
+    transition: 0.2s;
+  }
+  
+  .create-account-submit:hover {
+    transform: translateY(-1px);
+  
+    box-shadow:
+      0 8px 20px rgba(21, 16, 184, 0.25);
+  }
+  
+  /* ================= LOGIN ================= */
+  
+  .already-account {
+    text-align: center;
+  
+    color: #6b7280;
+  
+    font-size: 14px;
+  
+    margin-top: 22px;
+  }
+  
+  .login-link {
+    border: none;
+  
+    background: none;
+  
+    color: #123c9c;
+  
+    font-size: 14px;
+  
+    font-weight: 700;
+  
+    margin-left: 5px;
+  
+    cursor: pointer;
+  }
+  
+  .login-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* ================= MOBILE ================= */
+  
+  @media (max-width: 600px) {
+  
+    .create-account-page {
+      padding: 90px 18px 30px;
+    }
+  
+    .create-account-card {
+      padding: 32px 28px;
+  
+      border-radius: 14px;
+    }
+  
+    .create-account-card h1 {
+      font-size: 25px;
+    }
+  
+    .create-account-logo {
+      font-size: 27px;
+    }
+  }
+  
+  @media (max-width: 400px) {
+  
+    .create-account-page {
+      padding: 85px 14px 25px;
+    }
+  
+    .create-account-card {
+      padding: 28px 20px;
+    }
+  }
+
+  /* ================= PASSWORD EYE ================= */
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .password-input-wrapper input {
+    padding-right: 48px;
+  }
+  
+  .password-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  
+    width: 34px;
+    height: 34px;
+  
+    border: none;
+    background: transparent;
+  
+    color: #6b7280;
+  
+    cursor: pointer;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding: 0;
+    border-radius: 6px;
+  
+    transition: 0.2s;
+  }
+  
+  .password-eye svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .password-eye:hover {
+    color: #123c9c;
+    background: #f0f4ff;
+  }
+
+  .server-error {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .success-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+  
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  
+    width: 360px;
+    padding: 16px 18px;
+  
+    background: #ffffff;
+    border-radius: 10px;
+    border-left: 4px solid #16a34a;
+  
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  
+    animation: slideInRight 0.4s ease-out;
+  }
+  
+  .success-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    background: #dcfce7;
+    color: #16a34a;
+  
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .success-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .success-content strong {
+    color: #111827;
+    font-size: 14px;
+  }
+  
+  .success-content span {
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }

@@ -1,11 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./pages/Login";
 import "./App.css";
-import AdminLogin from "./pages/AdminLogin";
-import CreateAccount from "./pages/CreateAccount";
-import Profile from "./pages/Profile";
-
 import sixtLogo from "./assets/partners/sixt.png";
 import dollarLogo from "./assets/partners/dollar.gif";
 import budgetLogo from "./assets/partners/budget.png";
@@ -152,9 +146,7 @@ function ReviewCard({ review }: { review: Review }) {
 
 
 
-function Home() {
-  const navigate=useNavigate();
-  const isLoggedIn = Boolean(localStorage.getItem("token"));
+function App() {
   return (
     <div className="home-page">
 
@@ -162,19 +154,9 @@ function Home() {
       <nav className="navbar">
         <div className="logo">Rentwise</div>
 
-        {/* <button
-          className="login-btn"
-          onClick={() => navigate("/login")}
-        >
+        <button className="login-btn">
           Login
-        </button> */}
-
-<button
-  className="login-btn"
-  onClick={() => navigate(isLoggedIn ? "/profile" : "/login")}
->
-  {isLoggedIn ? "Profile" : "Login"}
-</button>
+        </button>
       </nav>
 
       {/* Hero Section */}
@@ -1243,20 +1225,6 @@ function Home() {
 </footer>
 
     </div>
-  );
-}
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/create-account" element={<CreateAccount />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </BrowserRouter>
   );
 }
 

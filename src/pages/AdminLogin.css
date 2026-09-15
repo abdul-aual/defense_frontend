@@ -1,6 +1,4 @@
-/* ================= LOGIN PAGE ================= */
-
-.login-page {
+.admin-login-page {
     min-height: 100vh;
   
     display: flex;
@@ -21,29 +19,8 @@
   
     position: relative;
   }
-  .login-logo {
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    outline: none;
-    box-shadow: none;
-    cursor: pointer;
-  }
   
-  .login-logo:focus,
-  .login-logo:focus-visible,
-  .login-logo:hover,
-  .login-logo:active {
-    border: none;
-    background: transparent;
-    outline: none;
-    box-shadow: none;
-  }
-
-  /* ================= LOGIN CARD ================= */
-  
-  .login-card {
+  .admin-login-card {
     width: 100%;
     max-width: 430px;
   
@@ -59,9 +36,7 @@
     text-align: left;
   }
   
-  /* ================= LOGO ================= */
-  
-  .login-logo {
+  .admin-login-logo {
     text-align: center;
   
     color: #123c9c;
@@ -69,12 +44,29 @@
     font-size: 30px;
     font-weight: 800;
   
-    margin-bottom: 25px;
+    margin-bottom: 12px;
   }
   
-  /* ================= TITLE ================= */
+  .admin-badge {
+    width: fit-content;
   
-  .login-card h1 {
+    margin: 0 auto 18px;
+  
+    padding: 6px 12px;
+  
+    border-radius: 20px;
+  
+    background: #eef4ff;
+  
+    color: #123c9c;
+  
+    font-size: 11px;
+    font-weight: 800;
+  
+    letter-spacing: 1px;
+  }
+  
+  .admin-login-card h1 {
     text-align: center;
   
     color: #111827;
@@ -84,7 +76,7 @@
     margin-bottom: 8px;
   }
   
-  .login-subtitle {
+  .admin-login-subtitle {
     text-align: center;
   
     color: #6b7280;
@@ -96,27 +88,23 @@
     margin-bottom: 30px;
   }
   
-  /* ================= FORM ================= */
-  
-  .login-form-group {
+  .admin-form-group {
     margin-bottom: 18px;
   }
   
-  .login-form-group label {
+  .admin-form-group label {
     display: block;
   
     color: #244a96;
   
     font-size: 14px;
-  
     font-weight: 600;
   
     margin-bottom: 7px;
   }
   
-  .login-form-group input {
+  .admin-form-group input {
     width: 100%;
-  
     height: 48px;
   
     border: 1px solid #dce3ec;
@@ -136,25 +124,25 @@
     transition: 0.2s;
   }
   
-  .login-form-group input:focus {
+  .admin-form-group input:focus {
     border-color: #1769e0;
   
     background: white;
   
-    box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.08);
+    box-shadow:
+      0 0 0 3px rgba(23, 105, 224, 0.08);
   }
   
-  .login-form-group input::placeholder {
+  .admin-form-group input::placeholder {
     color: #9ca3af;
   }
   
   /* ================= OPTIONS ================= */
   
-  .login-options {
+  .admin-login-options {
     display: flex;
   
     align-items: center;
-  
     justify-content: space-between;
   
     margin: 4px 0 22px;
@@ -162,7 +150,7 @@
     font-size: 13px;
   }
   
-  .remember-me {
+  .admin-remember-me {
     display: flex;
   
     align-items: center;
@@ -174,7 +162,7 @@
     cursor: pointer;
   }
   
-  .remember-me input {
+  .admin-remember-me input {
     width: 15px;
     height: 15px;
   
@@ -183,7 +171,7 @@
     accent-color: #123c9c;
   }
   
-  .forgot-password {
+  .admin-forgot-password {
     border: none;
   
     background: none;
@@ -197,31 +185,30 @@
     padding: 0;
   }
   
-  .forgot-password:hover {
+  .admin-forgot-password:hover {
     text-decoration: underline;
   }
   
   /* ================= LOGIN BUTTON ================= */
   
-  .login-submit {
+  .admin-login-submit {
     width: 100%;
-  
     height: 50px;
   
     border: none;
   
     border-radius: 9px;
   
-    background: linear-gradient(
-      90deg,
-      #0969e8,
-      #1510b8
-    );
+    background:
+      linear-gradient(
+        90deg,
+        #0969e8,
+        #1510b8
+      );
   
     color: white;
   
     font-size: 16px;
-  
     font-weight: 700;
   
     cursor: pointer;
@@ -229,144 +216,74 @@
     transition: 0.2s;
   }
   
-  .login-submit:hover {
+  .admin-login-submit:hover {
     transform: translateY(-1px);
   
     box-shadow:
       0 8px 20px rgba(21, 16, 184, 0.25);
   }
   
-  /* ================= DIVIDER ================= */
+  /* ================= BACK BUTTON ================= */
   
-  .login-divider {
-    display: flex;
+  .back-to-login {
+    display: block;
   
-    align-items: center;
+    margin: 22px auto 0;
   
-    gap: 12px;
-  
-    margin: 25px 0 20px;
-  
-    color: #9ca3af;
-  
-    font-size: 12px;
-  }
-  
-  .login-divider::before,
-  .login-divider::after {
-    content: "";
-  
-    flex: 1;
-  
-    height: 1px;
-  
-    background: #e5e7eb;
-  }
-  
-  .login-divider span {
-    padding: 0 4px;
-  }
-  
-  /* ================= REGISTER ================= */
-  
-  .register-text {
-    text-align: center;
-  
-    color: #6b7280;
-  
-    font-size: 14px;
-  }
-  
-  .register-link {
     border: none;
   
     background: none;
   
     color: #123c9c;
   
-    font-weight: 700;
-  
-    margin-left: 5px;
+    font-size: 13px;
+    font-weight: 600;
   
     cursor: pointer;
-  
-    font-size: 14px;
   }
   
-  .register-link:hover {
+  .back-to-login:hover {
     text-decoration: underline;
   }
   
-  /* ================= TABLET ================= */
+  /* ================= MOBILE ================= */
   
   @media (max-width: 600px) {
   
-    .login-page {
+    .admin-login-page {
       padding: 90px 18px 30px;
     }
   
-    .login-card {
+    .admin-login-card {
       padding: 32px 28px;
   
       border-radius: 14px;
     }
   
-    .login-card h1 {
+    .admin-login-card h1 {
       font-size: 25px;
     }
   
-    .login-logo {
+    .admin-login-logo {
       font-size: 27px;
     }
   }
   
-  /* ================= MOBILE ================= */
-  
   @media (max-width: 400px) {
   
-    .login-page {
+    .admin-login-page {
       padding: 85px 14px 25px;
     }
   
-    .login-card {
+    .admin-login-card {
       padding: 28px 20px;
     }
   
-    .login-options {
+    .admin-login-options {
       font-size: 12px;
     }
   
-    .forgot-password {
+    .admin-forgot-password {
       font-size: 12px;
     }
-  }
-
-  .admin-login-section {
-    margin-top: 22px;
-    padding-top: 18px;
-  
-    border-top: 1px solid #e5e7eb;
-  
-    text-align: center;
-  
-    color: #6b7280;
-    font-size: 13px;
-  }
-  
-  .admin-login-link {
-    border: none;
-    background: none;
-  
-    color: #123c9c;
-  
-    font-size: 13px;
-    font-weight: 700;
-  
-    margin-left: 5px;
-  
-    cursor: pointer;
-  }
-  
-  .admin-login-link:hover {
-    text-decoration: underline;
   }
