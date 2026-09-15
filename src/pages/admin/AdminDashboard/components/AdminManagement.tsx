@@ -16,15 +16,7 @@ function AdminManagement() {
   return (
     <div className="admin-management">
 
-      {/* Back to Dashboard
-      <button
-        type="button"
-        className="back-dashboard-btn"
-        onClick={handleBackToDashboard}
-      >
-        ← Back to Dashboard
-      </button> */}
-
+  
       {/* ================= MENU ================= */}
 
       {selectedOption === "menu" && (

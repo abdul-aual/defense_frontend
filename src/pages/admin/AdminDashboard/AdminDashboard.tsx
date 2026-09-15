@@ -434,8 +434,8 @@ function AdminDashboard() {
                     )
                   }
                 >
-                  <span>＋</span>
-                  Add Vehicle
+                  <span>🚗</span>
+                  Vehicle Management
                 </button>
 
                 {/* View Bookings */}

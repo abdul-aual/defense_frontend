@@ -548,13 +548,13 @@ const VehicleManagement = ({
           }}
         >
           <span className="vehicle-option-icon">
-            ⌕
+          🛠️
           </span>
 
           <span>
-            <strong>Manage Vehicles</strong>
+            <strong>Maintenance</strong>
             <small>
-              Search and manage vehicles
+              Send vehicles for repair and maintenance
             </small>
           </span>
         </button>
