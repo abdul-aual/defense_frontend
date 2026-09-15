@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import PasswordInput from "../pages/admin/AdminDashboard/components/PasswordInput";
 import "./AdminLogin.css";
 
 function AdminLogin() {
@@ -34,7 +35,6 @@ function AdminLogin() {
     const phone = formData.phone.trim();
     const password = formData.password;
 
-    // Frontend validation
     if (!phone || !password) {
       setServerError("Phone number and password are required.");
       return;
@@ -73,14 +73,12 @@ function AdminLogin() {
         return;
       }
 
-      // Save admin authentication data
       localStorage.setItem("token", data.token);
       localStorage.setItem(
         "admin",
         JSON.stringify(data.admin)
       );
 
-      // Go to admin dashboard
       navigate("/admin-dashboard");
     } catch (error) {
       console.error("Admin Login Error:", error);
@@ -135,8 +133,8 @@ function AdminLogin() {
           <div className="admin-form-group">
             <label>Password</label>
 
-            <input
-              type="password"
+            <PasswordInput
+              id="admin-login-password"
               name="password"
               value={formData.password}
               onChange={handleChange}

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import PasswordInput from "../pages/admin/AdminDashboard/components/PasswordInput";
 import "./Login.css";
 
 function Login() {
@@ -35,7 +36,6 @@ function Login() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    // Phone
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required.";
     } else if (!/^01[0-9]{9}$/.test(formData.phone.trim())) {
@@ -43,7 +43,6 @@ function Login() {
         "Enter a valid 11-digit phone number (01XXXXXXXXX).";
     }
 
-    // Password
     if (!formData.password) {
       newErrors.password = "Password is required.";
     }
@@ -88,16 +87,13 @@ function Login() {
         return;
       }
 
-      // Save JWT token
       localStorage.setItem("token", data.token);
 
-      // Save customer information
       localStorage.setItem(
         "customer",
         JSON.stringify(data.customer)
       );
 
-      // Login successful
       navigate("/");
     } catch (error) {
       console.error("Customer Login Error:", error);
@@ -116,13 +112,13 @@ function Login() {
       <div className="login-card">
 
         <div className="login-logo">
-        <button
-  type="button"
-  className="login-logo"
-  onClick={() => navigate("/")}
->
-  Rentwise
-</button>
+          <button
+            type="button"
+            className="login-logo"
+            onClick={() => navigate("/")}
+          >
+            Rentwise
+          </button>
         </div>
 
         <h1>Welcome Back</h1>
@@ -133,7 +129,6 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
 
-          {/* ================= PHONE NUMBER ================= */}
           <div className="login-form-group">
             <label>Phone Number</label>
 
@@ -154,12 +149,11 @@ function Login() {
             )}
           </div>
 
-          {/* ================= PASSWORD ================= */}
           <div className="login-form-group">
             <label>Password</label>
 
-            <input
-              type="password"
+            <PasswordInput
+              id="login-password"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -173,14 +167,12 @@ function Login() {
             )}
           </div>
 
-          {/* ================= SERVER ERROR ================= */}
           {serverError && (
             <div className="server-error">
               {serverError}
             </div>
           )}
 
-          {/* ================= OPTIONS ================= */}
           <div className="login-options">
 
             <label className="remember-me">
@@ -197,7 +189,6 @@ function Login() {
 
           </div>
 
-          {/* ================= LOGIN BUTTON ================= */}
           <button
             type="submit"
             className="login-submit"
@@ -208,12 +199,10 @@ function Login() {
 
         </form>
 
-        {/* ================= DIVIDER ================= */}
         <div className="login-divider">
           <span>OR</span>
         </div>
 
-        {/* ================= CUSTOMER REGISTRATION ================= */}
         <p className="register-text">
           Don't have an account?
 
@@ -226,7 +215,6 @@ function Login() {
           </button>
         </p>
 
-        {/* ================= ADMIN LOGIN ================= */}
         <div className="admin-login-section">
 
           <span>Are you an administrator?</span>
