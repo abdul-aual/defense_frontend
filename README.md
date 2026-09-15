@@ -1,75 +1,107 @@
-# React + TypeScript + Vite
+# 🚗 Rentwise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Web-Based Vehicle Rental Management System
 
-Currently, two official plugins are available:
+Rentwise is a web-based vehicle rental management system designed to make vehicle rental simple, convenient, and organized. The system allows customers to search for suitable vehicles based on vehicle type, city, pick-up point, and journey dates, while administrators can manage vehicles, customers, bookings, and other rental operations.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📌 Project Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Rentwise is developed as a university defense project with the goal of providing a user-friendly platform for managing vehicle rentals.
 
-## Expanding the ESLint configuration
+The system is designed to connect customers with available rental vehicles and simplify the complete rental management process through a centralized web application.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🎯 Main Objectives
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Make vehicle rental easier and more convenient
+- Allow customers to find suitable vehicles quickly
+- Provide city-based vehicle searching
+- Manage vehicle availability efficiently
+- Simplify the booking process
+- Provide separate administrative management
+- Maintain organized customer and booking information
+- Provide a clean and responsive user interface
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## ✨ Key Features
 
-```
+### 👤 Customer Features
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+- Search for rental vehicles
+- Select vehicle type
+- Select rental city
+- Enter pick-up point
+- Select journey start date
+- Select journey end date
+- View available vehicles
+- View vehicle details and rental price
+- Book a vehicle
+- View booking information
+- Cancel bookings
+- Leave reviews after completing a booking
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🛠️ Admin Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Secure admin login
+- Manage vehicles
+- Add new vehicles
+- Update vehicle information
+- Disable vehicles when necessary
+- Set vehicles under maintenance
+- Manage customer bookings
+- Create bookings for customers
+- Monitor vehicle availability
 
-```
+### 👑 Super Admin Features
+
+- Secure super admin authentication
+- Create new administrators
+- Disable administrators
+- Enable disabled administrators
+- Manage administrator accounts
+- Monitor administrative activities
+
+---
+
+## 🚘 Vehicle Categories
+
+Rentwise currently supports the following vehicle types:
+
+- 🚗 Car
+- 🚙 SUV
+- 🚐 HiAce
+
+---
+
+## 📍 Supported Cities
+
+The current system supports:
+
+- Dhaka
+- Rangpur
+- Chattogram
+
+---
+
+## 🔄 Booking Flow
+
+The general customer booking process is:
+
+```text
+Home Page
+    ↓
+Search Vehicles
+    ↓
+View Available Vehicles
+    ↓
+Select Vehicle
+    ↓
+Booking Details
+    ↓
+Select Pick-up Time
+    ↓
+Confirm Booking
+    ↓
+Booking Created
