@@ -1,0 +1,414 @@
+.view-customer {
+    padding: 30px;
+  }
+  
+  .view-customer-back {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2563eb;
+    cursor: pointer;
+  }
+  
+  .view-customer-back:hover {
+    color: #1d4ed8;
+  }
+  
+  .view-customer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .view-customer-header h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: #111827;
+  }
+  
+  .view-customer-header p {
+    margin: 0;
+    color: #6b7280;
+  }
+  
+  .refresh-customers-btn {
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .refresh-customers-btn:hover:not(:disabled) {
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  
+  .refresh-customers-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .customer-table-card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  
+  .customer-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .customer-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .customer-table th,
+  .customer-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .customer-table th {
+    background: #f9fafb;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  
+  .customer-table td {
+    color: #4b5563;
+    font-size: 14px;
+  }
+  
+  .customer-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .customer-table tbody tr:hover {
+    background: #f9fafb;
+  }
+  
+  .customer-table th:first-child,
+  .customer-table td:first-child {
+    width: 70px;
+    text-align: center;
+  }
+  
+  .customer-table th:last-child,
+  .customer-table td:last-child {
+    width: 150px;
+  }
+  
+  .view-details-btn {
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .view-details-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  .customer-loading,
+  .customer-empty {
+    padding: 50px 20px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 15px;
+  }
+  
+  .customer-error {
+    margin-bottom: 20px;
+    padding: 13px 15px;
+    border-radius: 8px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 14px;
+  }
+  
+  /* Modal */
+  
+  .customer-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding: 20px;
+  
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .customer-modal {
+    position: relative;
+  
+    width: 100%;
+    max-width: 520px;
+  
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+  
+    box-sizing: border-box;
+  
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  }
+  
+  .customer-loading-modal {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px 30px;
+    color: #374151;
+    font-size: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .customer-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+  
+    width: 32px;
+    height: 32px;
+  
+    border: none;
+    background: transparent;
+  
+    color: #6b7280;
+    font-size: 27px;
+    line-height: 1;
+  
+    cursor: pointer;
+  }
+  
+  .customer-modal-close:hover {
+    color: #111827;
+  }
+  
+  .customer-modal-header {
+    padding-right: 35px;
+    margin-bottom: 25px;
+  }
+  
+  .customer-modal-header h3 {
+    margin: 0 0 6px;
+    font-size: 23px;
+    color: #111827;
+  }
+  
+  .customer-modal-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+  
+  .customer-details {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .customer-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  
+    padding: 14px 16px;
+  
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .customer-detail-row:last-child {
+    border-bottom: none;
+  }
+  
+  .detail-label {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .detail-value {
+    color: #111827;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: right;
+    word-break: break-word;
+  }
+  
+  .modal-close-btn {
+    width: 100%;
+    height: 44px;
+  
+    margin-top: 22px;
+  
+    border: none;
+    border-radius: 8px;
+  
+    background: #2563eb;
+    color: #ffffff;
+  
+    font-size: 14px;
+    font-weight: 600;
+  
+    cursor: pointer;
+  }
+  
+  .modal-close-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  .error-modal {
+    max-width: 420px;
+    text-align: center;
+  }
+  
+  .error-modal h3 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 20px;
+  }
+  
+  .error-modal p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+  
+  .modal-ok-btn {
+    margin-top: 20px;
+  
+    border: none;
+    border-radius: 8px;
+  
+    padding: 10px 25px;
+  
+    background: #2563eb;
+    color: #ffffff;
+  
+    font-size: 14px;
+    font-weight: 600;
+  
+    cursor: pointer;
+  }
+  
+  .modal-ok-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  @media (max-width: 700px) {
+    .view-customer {
+      padding: 20px;
+    }
+  
+    .view-customer-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  
+    .refresh-customers-btn {
+      width: 100%;
+    }
+  
+    .customer-table th,
+    .customer-table td {
+      padding: 13px 12px;
+    }
+  
+    .customer-modal {
+      padding: 25px 20px;
+    }
+  
+    .customer-detail-row {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 5px;
+    }
+  
+    .detail-value {
+      text-align: left;
+    }
+  }
+
+  .load-customers-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    min-width: 180px;
+    height: 48px;
+  
+    padding: 0 28px;
+  
+    border: none;
+    border-radius: 8px;
+  
+    background: #2563eb;
+    color: #ffffff;
+  
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+  
+    cursor: pointer;
+  
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+  
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+  
+  .load-customers-btn:hover {
+    background: #1d4ed8;
+  
+    transform: translateY(-1px);
+  
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+  }
+  
+  .load-customers-btn:active {
+    transform: translateY(0);
+  
+    box-shadow: 0 3px 7px rgba(37, 99, 235, 0.18);
+  }
+  
+  .load-customers-btn:focus,
+  .load-customers-btn:focus-visible {
+    outline: none;
+  }
+  
+  .load-customers-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }

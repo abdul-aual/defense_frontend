@@ -1,0 +1,79 @@
+.admin-management {
+    padding: 30px;
+  }
+  
+  .back-dashboard-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2563eb;
+    cursor: pointer;
+  }
+  
+  .management-header {
+    margin-bottom: 30px;
+  }
+  
+  .management-header h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: #111827;
+  }
+  
+  .management-header p {
+    margin: 0;
+    color: #6b7280;
+  }
+  
+  .management-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+    gap: 25px;
+    max-width: 800px;
+  }
+  
+  .management-card {
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 30px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .management-card:hover {
+    transform: translateY(-3px);
+    border-color: #2563eb;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+  
+  .management-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
+  
+  .management-card h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    color: #111827;
+  }
+  
+  .management-card p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+  
+  @media (max-width: 700px) {
+    .management-options {
+      grid-template-columns: 1fr;
+    }
+  
+    .admin-management {
+      padding: 20px;
+    }
+  }

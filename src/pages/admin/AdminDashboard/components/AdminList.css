@@ -1,0 +1,204 @@
+.admin-list-container {
+    padding: 30px;
+  }
+  
+  .admin-list-back {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2563eb;
+    cursor: pointer;
+  }
+  
+  .admin-list-back:hover {
+    color: #1d4ed8;
+  }
+  
+  .admin-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+  }
+  
+  .admin-list-header h2 {
+    margin: 0 0 7px;
+    font-size: 28px;
+    color: #111827;
+  }
+  
+  .admin-list-header p {
+    margin: 0;
+    color: #6b7280;
+  }
+  
+  .refresh-admin-btn {
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #374151;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .refresh-admin-btn:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  
+  .admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+  }
+  
+  .admin-table th {
+    background: #f8fafc;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    padding: 15px 18px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .admin-table td {
+    padding: 16px 18px;
+    color: #4b5563;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+  
+  .admin-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .admin-table tbody tr:hover {
+    background: #fafafa;
+  }
+  
+  .admin-name {
+    color: #111827;
+    font-weight: 600;
+  }
+  
+  /* Status */
+  
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .status-badge.active {
+    background: #ecfdf3;
+    color: #15803d;
+  }
+  
+  .status-badge.active .status-dot {
+    background: #22c55e;
+  }
+  
+  .status-badge.deactivated {
+    background: #fef2f2;
+    color: #dc2626;
+  }
+  
+  .status-badge.deactivated .status-dot {
+    background: #ef4444;
+  }
+  
+  /* Action Buttons */
+  
+  .status-action-btn {
+    border: none;
+    padding: 9px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    white-space: nowrap;
+  }
+  
+  .deactivate-btn {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+  }
+  
+  .deactivate-btn:hover {
+    background: #ffedd5;
+    border-color: #fdba74;
+  }
+  
+  .activate-btn {
+    background: #ecfdf3;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+  }
+  
+  .activate-btn:hover {
+    background: #dcfce7;
+    border-color: #86efac;
+  }
+  
+  /* Messages */
+  
+  .admin-list-message,
+  .admin-list-empty {
+    padding: 40px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: #6b7280;
+  }
+  
+  .admin-list-error {
+    padding: 15px 18px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 700px) {
+    .admin-list-container {
+      padding: 20px;
+    }
+  
+    .admin-list-header {
+      align-items: flex-start;
+      gap: 15px;
+      flex-direction: column;
+    }
+  }

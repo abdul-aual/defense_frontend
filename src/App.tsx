@@ -5,6 +5,9 @@ import "./App.css";
 import AdminLogin from "./pages/AdminLogin";
 import CreateAccount from "./pages/CreateAccount";
 import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/admin/AdminDashboard/AdminDashboard";
+
+
 
 import sixtLogo from "./assets/partners/sixt.png";
 import dollarLogo from "./assets/partners/dollar.gif";
@@ -153,8 +156,13 @@ function ReviewCard({ review }: { review: Review }) {
 
 
 function Home() {
-  const navigate=useNavigate();
-  const isLoggedIn = Boolean(localStorage.getItem("token"));
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const admin = localStorage.getItem("admin");
+  const customer = localStorage.getItem("customer");
+
+  const isLoggedIn = Boolean(token);
   return (
     <div className="home-page">
 
@@ -171,10 +179,19 @@ function Home() {
 
 <button
   className="login-btn"
-  onClick={() => navigate(isLoggedIn ? "/profile" : "/login")}
+  onClick={() => {
+    if (token && admin) {
+      navigate("/admin-dashboard");
+    } else if (token && customer) {
+      navigate("/profile");
+    } else {
+      navigate("/login");
+    }
+  }}
 >
   {isLoggedIn ? "Profile" : "Login"}
 </button>
+
       </nav>
 
       {/* Hero Section */}
@@ -1249,14 +1266,38 @@ function Home() {
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/create-account" element={<CreateAccount />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Home />} />
+
+    <Route path="/login" element={<Login />} />
+
+    <Route
+      path="/admin-login"
+      element={<AdminLogin />}
+    />
+
+    <Route
+      path="/create-account"
+      element={<CreateAccount />}
+    />
+
+    <Route
+      path="/profile"
+      element={<Profile />}
+    />
+
+    <Route
+      path="/admin-dashboard"
+      element={<AdminDashboard />}
+    />
+
+
+
+
+
+
+  </Routes>
+</BrowserRouter>
   );
 }
 
