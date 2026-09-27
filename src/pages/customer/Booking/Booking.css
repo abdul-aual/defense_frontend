@@ -1,0 +1,1005 @@
+/* =========================================================
+   BOOKING PAGE
+========================================================= */
+
+.booking-page {
+    min-height: 100vh;
+  
+    background:
+      radial-gradient(
+        circle at 8% 5%,
+        rgba(59, 130, 246, 0.10),
+        transparent 28%
+      ),
+      radial-gradient(
+        circle at 92% 15%,
+        rgba(14, 165, 233, 0.08),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 50% 100%,
+        rgba(99, 102, 241, 0.07),
+        transparent 35%
+      ),
+      linear-gradient(
+        135deg,
+        #f8fafc 0%,
+        #eef4ff 48%,
+        #f8fafc 100%
+      );
+  
+    padding: 110px 20px 60px;
+  
+    color: #333;
+  }
+  
+  
+  /* =========================================================
+     CONTAINER
+  ========================================================= */
+  
+  .booking-container {
+    max-width: 1050px;
+    margin: 0 auto;
+  }
+  
+  
+  /* =========================================================
+     HEADER
+  ========================================================= */
+  
+  .booking-header {
+    margin-bottom: 22px;
+  }
+  
+  .booking-back-link {
+    border: none;
+    background: transparent;
+  
+    color: #555;
+  
+    font-size: 12px;
+    font-weight: 600;
+  
+    cursor: pointer;
+  
+    padding: 0;
+    margin-bottom: 15px;
+  
+    transition: color 0.2s ease;
+  }
+  
+  .booking-back-link:hover {
+    color: #e52e3d;
+  }
+  
+  .booking-header h1 {
+    margin: 0 0 7px;
+  
+    color: #222;
+  
+    font-size: 28px;
+    font-weight: 700;
+  }
+  
+  .booking-header p {
+    margin: 0;
+  
+    color: #777;
+  
+    font-size: 13px;
+  }
+  
+  
+  /* =========================================================
+     MAIN LAYOUT
+  ========================================================= */
+  
+  .booking-layout {
+    display: grid;
+  
+    grid-template-columns:
+      minmax(0, 1fr)
+      320px;
+  
+    gap: 18px;
+  
+    align-items: start;
+  }
+  
+  
+  /* =========================================================
+     MAIN LEFT SIDE
+  ========================================================= */
+  
+  .booking-main {
+    display: flex;
+  
+    flex-direction: column;
+  
+    gap: 15px;
+  }
+  
+  
+  /* =========================================================
+     SECTION
+  ========================================================= */
+  
+  .booking-section {
+    background: #fff;
+  
+    border: 1px solid #e4e4e4;
+  
+    border-radius: 7px;
+  
+    padding: 20px;
+  
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  .booking-section-title {
+    display: flex;
+  
+    align-items: center;
+  
+    justify-content: space-between;
+  
+    gap: 15px;
+  
+    margin-bottom: 17px;
+  
+    padding-bottom: 13px;
+  
+    border-bottom: 1px solid #eee;
+  }
+  
+  .booking-section-title h2 {
+    margin: 0;
+  
+    color: #222;
+  
+    font-size: 17px;
+  
+    font-weight: 700;
+  }
+  
+  .booking-section-title span {
+    color: #555;
+  
+    background: #f5f5f5;
+  
+    border: 1px solid #e5e5e5;
+  
+    border-radius: 4px;
+  
+    padding: 5px 9px;
+  
+    font-size: 10px;
+  
+    font-weight: 600;
+  }
+  
+  .booking-section-title p {
+    margin: 4px 0 0;
+  
+    color: #888;
+  
+    font-size: 11px;
+  }
+  
+  
+  /* =========================================================
+     VEHICLE CARD
+  ========================================================= */
+  
+  .booking-vehicle-card {
+    display: flex;
+  
+    gap: 22px;
+  
+    align-items: center;
+  }
+  
+  .booking-vehicle-image-box {
+    width: 270px;
+    height: 165px;
+  
+    flex-shrink: 0;
+  
+    display: flex;
+  
+    align-items: center;
+    justify-content: center;
+  
+    background: #f8f8f8;
+  
+    border-radius: 6px;
+  
+    overflow: hidden;
+  }
+  
+  .booking-vehicle-image {
+    width: 100%;
+    height: 100%;
+  
+    object-fit: contain;
+  }
+  
+  .booking-no-image {
+    color: #999;
+  
+    font-size: 12px;
+  }
+  
+  .booking-vehicle-info {
+    flex: 1;
+  
+    min-width: 0;
+  }
+  
+  .booking-vehicle-info h2 {
+    margin: 0 0 5px;
+  
+    color: #222;
+  
+    font-size: 21px;
+  
+    font-weight: 700;
+  }
+  
+  .booking-vehicle-type {
+    margin: 0 0 10px;
+  
+    color: #555;
+  
+    font-size: 13px;
+  
+    font-weight: 500;
+  }
+  
+  .booking-registration {
+    margin-bottom: 15px;
+  
+    color: #777;
+  
+    font-size: 11px;
+  }
+  
+  .booking-registration strong {
+    color: #222;
+  }
+  
+  
+  /* =========================================================
+     VEHICLE SPECIFICATIONS
+  ========================================================= */
+  
+  .booking-spec-grid {
+    display: grid;
+  
+    grid-template-columns:
+      1fr 1fr;
+  
+    gap: 9px;
+  }
+  
+  .booking-spec-grid div {
+    display: flex;
+  
+    flex-direction: column;
+  
+    gap: 3px;
+  
+    padding: 8px 10px;
+  
+    background: #fafafa;
+  
+    border: 1px solid #eeeeee;
+  
+    border-radius: 5px;
+  }
+  
+  .booking-spec-grid span {
+    color: #888;
+  
+    font-size: 10px;
+  }
+  
+  .booking-spec-grid strong {
+    color: #333;
+  
+    font-size: 11px;
+  }
+  
+  
+  /* =========================================================
+     DATE GRID
+  ========================================================= */
+  
+  .booking-date-grid {
+    display: grid;
+  
+    grid-template-columns:
+      repeat(4, 1fr);
+  
+    gap: 10px;
+  }
+  
+  .booking-detail-box {
+    padding: 12px;
+  
+    background: #fafafa;
+  
+    border: 1px solid #e9e9e9;
+  
+    border-radius: 5px;
+  
+    display: flex;
+  
+    flex-direction: column;
+  
+    gap: 5px;
+  }
+  
+  .booking-detail-box span {
+    color: #888;
+  
+    font-size: 10px;
+  }
+  
+  .booking-detail-box strong {
+    color: #222;
+  
+    font-size: 12px;
+  }
+  
+  
+  /* =========================================================
+     PICKUP POINT
+  ========================================================= */
+  
+  .pickup-input-wrapper {
+    display: flex;
+  
+    flex-direction: column;
+  
+    gap: 7px;
+  }
+  
+  .pickup-input-wrapper label {
+    color: #444;
+  
+    font-size: 11px;
+  
+    font-weight: 600;
+  }
+  
+  .pickup-input-wrapper input {
+    width: 100%;
+  
+    height: 42px;
+  
+    box-sizing: border-box;
+  
+    padding: 0 12px;
+  
+    border: 1px solid #dcdcdc;
+  
+    border-radius: 5px;
+  
+    background: #fff;
+  
+    color: #333;
+  
+    font-size: 12px;
+  
+    outline: none;
+  
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  
+  .pickup-input-wrapper input::placeholder {
+    color: #aaa;
+  }
+  
+  .pickup-input-wrapper input:focus {
+    border-color: #777;
+  
+    box-shadow:
+      0 0 0 2px rgba(0, 0, 0, 0.04);
+  }
+  
+  
+  /* =========================================================
+     PRICE SUMMARY
+  ========================================================= */
+  
+  .booking-summary {
+    position: sticky;
+  
+    top: 100px;
+  
+    background: #fff;
+  
+    border: 1px solid #e3e3e3;
+  
+    border-radius: 7px;
+  
+    padding: 20px;
+  
+    box-shadow:
+      0 5px 15px rgba(0, 0, 0, 0.07);
+  }
+  
+  .booking-summary h2 {
+    margin: 0 0 17px;
+  
+    color: #222;
+  
+    font-size: 18px;
+  
+    font-weight: 700;
+  
+    padding-bottom: 13px;
+  
+    border-bottom: 1px solid #eee;
+  }
+  
+  
+  /* =========================================================
+     SUMMARY VEHICLE
+  ========================================================= */
+  
+  .summary-vehicle {
+    margin-bottom: 16px;
+  
+    padding: 11px;
+  
+    background: #fafafa;
+  
+    border: 1px solid #eeeeee;
+  
+    border-radius: 5px;
+  }
+  
+  .summary-vehicle div {
+    display: flex;
+  
+    flex-direction: column;
+  
+    gap: 4px;
+  }
+  
+  .summary-vehicle strong {
+    color: #222;
+  
+    font-size: 13px;
+  }
+  
+  .summary-vehicle span {
+    color: #777;
+  
+    font-size: 10px;
+  }
+  
+  
+  /* =========================================================
+     SUMMARY ROW
+  ========================================================= */
+  
+  .summary-row {
+    display: flex;
+  
+    align-items: center;
+  
+    justify-content: space-between;
+  
+    gap: 10px;
+  
+    margin-bottom: 11px;
+  }
+  
+  .summary-row span {
+    color: #777;
+  
+    font-size: 11px;
+  }
+  
+  .summary-row strong {
+    color: #333;
+  
+    font-size: 11px;
+  
+    font-weight: 600;
+  
+    text-align: right;
+  }
+  
+  
+  /* =========================================================
+     DIVIDER
+  ========================================================= */
+  
+  .summary-divider {
+    height: 1px;
+  
+    background: #e8e8e8;
+  
+    margin: 15px 0;
+  }
+  
+  
+  /* =========================================================
+     TOTAL
+  ========================================================= */
+  
+  .summary-total {
+    display: flex;
+  
+    align-items: center;
+  
+    justify-content: space-between;
+  
+    gap: 10px;
+  
+    margin-bottom: 17px;
+  }
+  
+  .summary-total span {
+    color: #333;
+  
+    font-size: 13px;
+  
+    font-weight: 600;
+  }
+  
+  .summary-total strong {
+    color: #111;
+  
+    font-size: 21px;
+  
+    font-weight: 700;
+  }
+  
+  
+  /* =========================================================
+     CONFIRM BUTTON
+  ========================================================= */
+  
+  .confirm-booking-btn {
+    width: 100%;
+  
+    height: 43px;
+  
+    border: none;
+  
+    border-radius: 4px;
+  
+    background: #e52e3d;
+  
+    color: #fff;
+  
+    font-size: 13px;
+  
+    font-weight: 600;
+  
+    cursor: pointer;
+  
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+  
+  .confirm-booking-btn:hover:not(:disabled) {
+    background: #c92130;
+  
+    transform: translateY(-1px);
+  }
+  
+  .confirm-booking-btn:disabled {
+    background: #aaa;
+  
+    cursor: not-allowed;
+  }
+  
+  
+  /* =========================================================
+     NOTE
+  ========================================================= */
+  
+  .booking-note {
+    margin: 11px 0 0;
+  
+    color: #999;
+  
+    font-size: 9px;
+  
+    line-height: 1.5;
+  
+    text-align: center;
+  }
+  
+  
+  /* =========================================================
+     ERROR
+  ========================================================= */
+  
+  .booking-error-message {
+    padding: 11px 13px;
+  
+    background: #fff4f4;
+  
+    border: 1px solid #f0caca;
+  
+    border-radius: 5px;
+  
+    color: #c92130;
+  
+    font-size: 11px;
+  
+    line-height: 1.5;
+  }
+  
+  
+  /* =========================================================
+     SUCCESS
+  ========================================================= */
+  
+  .booking-success-box {
+    display: flex;
+  
+    align-items: flex-start;
+  
+    gap: 15px;
+  
+    background: #fff;
+  
+    border: 1px solid #dcebdc;
+  
+    border-radius: 7px;
+  
+    padding: 22px;
+  
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  .booking-success-icon {
+    width: 38px;
+    height: 38px;
+  
+    flex-shrink: 0;
+  
+    display: flex;
+  
+    align-items: center;
+    justify-content: center;
+  
+    border-radius: 50%;
+  
+    background: #2e8b57;
+  
+    color: #fff;
+  
+    font-size: 20px;
+  
+    font-weight: 700;
+  }
+  
+  .booking-success-box h3 {
+    margin: 0 0 5px;
+  
+    color: #222;
+  
+    font-size: 17px;
+  }
+  
+  .booking-success-box p {
+    margin: 0 0 13px;
+  
+    color: #666;
+  
+    font-size: 12px;
+  }
+  
+  .booking-success-btn {
+    border: none;
+  
+    background: #333;
+  
+    color: #fff;
+  
+    padding: 8px 14px;
+  
+    border-radius: 4px;
+  
+    font-size: 11px;
+  
+    font-weight: 600;
+  
+    cursor: pointer;
+  }
+  
+  .booking-success-btn:hover {
+    background: #222;
+  }
+  
+  
+  /* =========================================================
+     INVALID BOOKING PAGE
+  ========================================================= */
+  
+  .booking-error-page {
+    background: #fff;
+  
+    border: 1px solid #e5e5e5;
+  
+    border-radius: 7px;
+  
+    padding: 65px 25px;
+  
+    text-align: center;
+  
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  .booking-error-icon {
+    margin-bottom: 12px;
+  
+    font-size: 42px;
+  }
+  
+  .booking-error-page h2 {
+    margin: 0 0 8px;
+  
+    color: #222;
+  
+    font-size: 21px;
+  }
+  
+  .booking-error-page p {
+    max-width: 430px;
+  
+    margin: 0 auto 20px;
+  
+    color: #666;
+  
+    font-size: 12px;
+  
+    line-height: 1.6;
+  }
+  
+  .booking-back-btn {
+    border: none;
+  
+    background: #e52e3d;
+  
+    color: #fff;
+  
+    padding: 9px 20px;
+  
+    border-radius: 4px;
+  
+    font-size: 12px;
+  
+    font-weight: 600;
+  
+    cursor: pointer;
+  }
+  
+  .booking-back-btn:hover {
+    background: #c92130;
+  }
+  
+  
+  /* =========================================================
+     TABLET
+  ========================================================= */
+  
+  @media (max-width: 850px) {
+  
+    .booking-layout {
+      grid-template-columns: 1fr;
+    }
+  
+    .booking-summary {
+      position: static;
+  
+      order: -1;
+    }
+  
+    .booking-date-grid {
+      grid-template-columns:
+        repeat(2, 1fr);
+    }
+  
+  }
+  
+  
+  /* =========================================================
+     MOBILE
+  ========================================================= */
+  
+  @media (max-width: 600px) {
+  
+    .booking-page {
+      padding: 90px 12px 35px;
+    }
+  
+    .booking-header h1 {
+      font-size: 24px;
+    }
+  
+    .booking-section {
+      padding: 15px;
+    }
+  
+    .booking-vehicle-card {
+      flex-direction: column;
+  
+      align-items: stretch;
+  
+      gap: 15px;
+    }
+  
+    .booking-vehicle-image-box {
+      width: 100%;
+  
+      height: 190px;
+    }
+  
+    .booking-vehicle-info h2 {
+      font-size: 19px;
+    }
+  
+    .booking-spec-grid {
+      grid-template-columns:
+        1fr 1fr;
+    }
+  
+    .booking-date-grid {
+      grid-template-columns:
+        1fr 1fr;
+    }
+  
+    .booking-summary {
+      padding: 16px;
+    }
+  
+  }
+  
+  
+  /* =========================================================
+     SMALL MOBILE
+  ========================================================= */
+  
+  @media (max-width: 380px) {
+  
+    .booking-page {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  
+    .booking-date-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .booking-spec-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  
+    .summary-total strong {
+      font-size: 19px;
+    }
+  
+  }
+
+  /* =========================================================
+   LOGIN REQUIRED TOAST
+========================================================= */
+
+.login-toast {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+  
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  
+    min-width: 340px;
+    max-width: 430px;
+  
+    padding: 16px 18px;
+  
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-left: 5px solid #2563eb;
+  
+    border-radius: 12px;
+  
+    box-shadow:
+      0 12px 30px rgba(15, 23, 42, 0.16),
+      0 4px 10px rgba(15, 23, 42, 0.08);
+  
+    z-index: 9999;
+  
+    animation: loginToastSlideIn 0.35s ease-out;
+  }
+  
+  .login-toast-icon {
+    width: 38px;
+    height: 38px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    flex-shrink: 0;
+  
+    background: #eff6ff;
+    border-radius: 50%;
+  
+    font-size: 19px;
+  }
+  
+  .login-toast-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .login-toast-content strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e3a8a;
+  }
+  
+  .login-toast-content span {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #475569;
+  }
+  
+  
+  /* =========================================================
+     TOAST ANIMATION
+  ========================================================= */
+  
+  @keyframes loginToastSlideIn {
+    from {
+      opacity: 0;
+      transform: translateX(35px);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  
+  /* =========================================================
+     MOBILE
+  ========================================================= */
+  
+  @media (max-width: 600px) {
+    .login-toast {
+      top: 15px;
+      right: 15px;
+      left: 15px;
+  
+      min-width: unset;
+      max-width: none;
+  
+      padding: 14px 15px;
+    }
+  
+    .login-toast-content span {
+      font-size: 12.5px;
+    }
+  }
