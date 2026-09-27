@@ -6,6 +6,7 @@ import AdminManagement from "./components/AdminManagement";
 import ViewCustomer from "./components/ViewCustomer";
 import VehicleManagement from "./components/VehicleManagement";
 import ChangePassword from "./components/ChangePassword";
+import BookingManagement from "./components/BookingManagement";
 
 interface Admin {
   id: number;
@@ -19,6 +20,7 @@ type ActiveSection =
   | "vehicle-management"
   | "admin-management"
   | "view-customer"
+  | "booking-management"
   | "profile";
 
 function AdminDashboard() {
@@ -95,6 +97,9 @@ function AdminDashboard() {
 
       case "view-customer":
         return "View Customers";
+
+      case "booking-management":
+        return "Booking Management";
 
       case "profile":
         return "Profile";
@@ -183,8 +188,17 @@ function AdminDashboard() {
           {/* ================= BOOKINGS ================= */}
 
           <button
-            className="sidebar-item"
+            className={`sidebar-item ${
+              activeSection === "booking-management"
+                ? "active"
+                : ""
+            }`}
             type="button"
+            onClick={() =>
+              setActiveSection(
+                "booking-management"
+              )
+            }
           >
             <span>▤</span>
             Bookings
@@ -433,7 +447,7 @@ function AdminDashboard() {
 
               <div className="quick-actions">
 
-                {/* Add Vehicle */}
+                {/* Vehicle Management */}
 
                 <button
                   type="button"
@@ -451,6 +465,11 @@ function AdminDashboard() {
 
                 <button
                   type="button"
+                  onClick={() =>
+                    setActiveSection(
+                      "booking-management"
+                    )
+                  }
                 >
                   <span>▤</span>
                   View Bookings
@@ -506,6 +525,18 @@ function AdminDashboard() {
         )}
 
         {/* ===================================================
+            BOOKING MANAGEMENT
+        =================================================== */}
+
+        {activeSection === "booking-management" && (
+          <BookingManagement
+            onBack={() =>
+              setActiveSection("dashboard")
+            }
+          />
+        )}
+
+        {/* ===================================================
             ADMIN MANAGEMENT
         =================================================== */}
 
@@ -541,4 +572,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-

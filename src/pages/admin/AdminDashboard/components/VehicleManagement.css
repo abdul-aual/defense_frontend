@@ -907,3 +907,280 @@
     padding: 35px 15px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   MAINTENANCE
+========================= */
+
+.vehicle-maintenance-search {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+
+  margin-bottom: 25px;
+  padding: 18px;
+
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.vehicle-maintenance-search
+  .vehicle-form-group {
+  flex: 1;
+}
+
+.vehicle-maintenance-search
+  .vehicle-submit-button {
+  min-height: 45px;
+  white-space: nowrap;
+}
+
+/* MAINTENANCE RESULT */
+
+.vehicle-maintenance-result {
+  margin-top: 10px;
+
+  padding: 20px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  background: #ffffff;
+}
+
+.vehicle-maintenance-result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.vehicle-maintenance-result-header h4 {
+  margin: 0 0 6px;
+
+  color: #111827;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.vehicle-maintenance-result-header p {
+  margin: 0;
+
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* MAINTENANCE DETAILS */
+
+.vehicle-maintenance-details {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.vehicle-maintenance-details div {
+  padding: 13px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+}
+
+.vehicle-maintenance-details span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.vehicle-maintenance-details strong {
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* MAINTENANCE WARNING */
+
+.vehicle-maintenance-warning {
+  padding: 15px 17px;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+
+  color: #991b1b;
+}
+
+.vehicle-maintenance-warning strong {
+  font-size: 14px;
+}
+
+.vehicle-maintenance-warning p {
+  margin: 7px 0 0;
+
+  color: #b91c1c;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* MAINTENANCE INFO */
+
+.vehicle-maintenance-info {
+  padding: 15px 17px;
+
+  background: #fffbeb;
+
+  border: 1px solid #fde68a;
+  border-radius: 9px;
+
+  color: #92400e;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* MAINTENANCE ACTION */
+
+.vehicle-maintenance-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 16px 18px;
+
+  background: #f0fdf4;
+
+  border: 1px solid #bbf7d0;
+  border-radius: 9px;
+}
+
+.vehicle-maintenance-action strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #166534;
+
+  font-size: 14px;
+}
+
+.vehicle-maintenance-action p {
+  margin: 0;
+
+  color: #15803d;
+
+  font-size: 12px;
+}
+
+/* SEND TO MAINTENANCE BUTTON */
+
+.vehicle-maintenance-button {
+  min-height: 43px;
+
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #d97706;
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.vehicle-maintenance-button:hover:not(:disabled) {
+  background: #b45309;
+}
+
+.vehicle-maintenance-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================
+   MAINTENANCE RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .vehicle-maintenance-details {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .vehicle-maintenance-search {
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 15px;
+  }
+
+  .vehicle-maintenance-search
+    .vehicle-submit-button {
+    width: 100%;
+  }
+
+  .vehicle-maintenance-result {
+    padding: 16px;
+  }
+
+  .vehicle-maintenance-result-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vehicle-maintenance-details {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .vehicle-maintenance-action {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vehicle-maintenance-button {
+    width: 100%;
+  }
+}

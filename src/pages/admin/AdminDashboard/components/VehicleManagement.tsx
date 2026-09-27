@@ -12,9 +12,21 @@ interface Vehicle {
   suitcase_capacity: number;
   daily_rent_price: number | string;
   city: string;
-  availability_status: "available" | "Booked";
+  availability_status:
+    | "available"
+    | "booked"
+    | "maintenance";
   image?: string | null;
   created_at?: string;
+}
+
+interface MaintenanceVehicle extends Vehicle {
+  active_booking?: {
+    id: number;
+    start_date: string;
+    end_date: string;
+    status: string;
+  } | null;
 }
 
 interface VehicleManagementProps {
@@ -27,7 +39,7 @@ const VehicleManagement = ({
   const token = localStorage.getItem("token");
 
   const [activeTab, setActiveTab] = useState<
-    "none" | "add" | "view"
+    "none" | "add" | "view" | "maintenance"
   >("none");
 
   // =========================
@@ -36,7 +48,8 @@ const VehicleManagement = ({
 
   const [vehicleName, setVehicleName] = useState("");
   const [vehicleType, setVehicleType] = useState("car");
-  const [registrationNumber, setRegistrationNumber] = useState("");
+  const [registrationNumber, setRegistrationNumber] =
+    useState("");
   const [acType, setAcType] = useState("AC");
   const [totalSeats, setTotalSeats] = useState("");
   const [fuelType, setFuelType] = useState("Petrol");
@@ -60,6 +73,22 @@ const VehicleManagement = ({
   const [error, setError] = useState("");
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+
+  // =========================
+  // MAINTENANCE STATES
+  // =========================
+
+  const [maintenanceRegistration, setMaintenanceRegistration] =
+    useState("");
+
+  const [maintenanceVehicle, setMaintenanceVehicle] =
+    useState<MaintenanceVehicle | null>(null);
+
+  const [checkingMaintenance, setCheckingMaintenance] =
+    useState(false);
+
+  const [sendingToMaintenance, setSendingToMaintenance] =
+    useState(false);
 
   // =========================
   // LOAD VEHICLES
@@ -184,6 +213,15 @@ const VehicleManagement = ({
   };
 
   // =========================
+  // RESET MAINTENANCE
+  // =========================
+
+  const resetMaintenance = () => {
+    setMaintenanceRegistration("");
+    setMaintenanceVehicle(null);
+  };
+
+  // =========================
   // ADD VEHICLE
   // =========================
 
@@ -276,12 +314,6 @@ const VehicleManagement = ({
       );
 
       resetForm();
-
-      // If View Vehicles was previously opened,
-      // refresh the vehicle list after adding.
-      if (activeTab === "view") {
-        handleViewVehicles();
-      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -290,6 +322,145 @@ const VehicleManagement = ({
       );
     } finally {
       setSaving(false);
+    }
+  };
+
+  // =========================
+  // CHECK VEHICLE FOR MAINTENANCE
+  // =========================
+
+  const handleCheckMaintenance = async () => {
+    setMessage("");
+    setError("");
+    setMaintenanceVehicle(null);
+
+    if (!token) {
+      setError("Authentication token not found.");
+      return;
+    }
+
+    const registration =
+      maintenanceRegistration.trim();
+
+    if (!registration) {
+      setError(
+        "Please enter a vehicle registration number."
+      );
+      return;
+    }
+
+    try {
+      setCheckingMaintenance(true);
+
+      const response = await fetch(
+        `http://localhost:5000/api/vehicle/maintenance/check?registration_number=${encodeURIComponent(
+          registration
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to check vehicle for maintenance."
+        );
+      }
+
+      setMaintenanceVehicle(data.vehicle || null);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to check vehicle for maintenance."
+      );
+    } finally {
+      setCheckingMaintenance(false);
+    }
+  };
+
+  // =========================
+  // SEND VEHICLE TO MAINTENANCE
+  // =========================
+
+  const handleSendToMaintenance = async () => {
+    setMessage("");
+    setError("");
+
+    if (!token) {
+      setError("Authentication token not found.");
+      return;
+    }
+
+    if (!maintenanceVehicle) {
+      setError(
+        "Please search for a vehicle first."
+      );
+      return;
+    }
+
+    if (
+      maintenanceVehicle.availability_status ===
+      "maintenance"
+    ) {
+      setError(
+        "This vehicle is already under maintenance."
+      );
+      return;
+    }
+
+    try {
+      setSendingToMaintenance(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/vehicle/maintenance",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            registration_number:
+              maintenanceVehicle.registration_number,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Failed to send vehicle to maintenance."
+        );
+      }
+
+      setMessage(
+        data.message ||
+          "Vehicle has been sent to maintenance successfully."
+      );
+
+      setMaintenanceVehicle(
+        data.vehicle || {
+          ...maintenanceVehicle,
+          availability_status: "maintenance",
+        }
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to send vehicle to maintenance."
+      );
+    } finally {
+      setSendingToMaintenance(false);
     }
   };
 
@@ -304,8 +475,12 @@ const VehicleManagement = ({
       return "available";
     }
 
-    if (status === "Booked") {
+    if (status === "booked") {
       return "booked";
+    }
+
+    if (status === "maintenance") {
+      return "maintenance";
     }
 
     return "";
@@ -318,8 +493,12 @@ const VehicleManagement = ({
       return "Available";
     }
 
-    if (status === "Booked") {
+    if (status === "booked") {
       return "Booked";
+    }
+
+    if (status === "maintenance") {
+      return "Maintenance";
     }
 
     return status;
@@ -352,10 +531,15 @@ const VehicleManagement = ({
   // =========================
 
   const handleTabChange = (
-    tab: "add" | "view"
+    tab: "add" | "view" | "maintenance"
   ) => {
     setMessage("");
     setError("");
+
+    if (tab === "maintenance") {
+      resetMaintenance();
+    }
+
     setActiveTab(tab);
   };
 
@@ -365,10 +549,6 @@ const VehicleManagement = ({
 
   return (
     <div className="vehicle-management">
-      {/* =========================
-          HEADER
-      ========================= */}
-
       <div className="vehicle-management-header">
         <button
           type="button"
@@ -381,18 +561,12 @@ const VehicleManagement = ({
         <h2>Vehicle Management</h2>
 
         <p>
-          Add new vehicles and view all vehicles registered
-          in Rentwise.
+          Add new vehicles, manage maintenance and view all
+          vehicles registered in Rentwise.
         </p>
       </div>
 
-      {/* =========================
-          TOP OPTIONS
-      ========================= */}
-
       <div className="vehicle-management-options">
-        {/* ADD VEHICLE */}
-
         <button
           type="button"
           className={`vehicle-option-button ${
@@ -413,8 +587,6 @@ const VehicleManagement = ({
           </div>
         </button>
 
-        {/* VIEW VEHICLES */}
-
         <button
           type="button"
           className={`vehicle-option-button ${
@@ -434,21 +606,37 @@ const VehicleManagement = ({
             </small>
           </div>
         </button>
-      </div>
 
-      {/* =========================
-          SUCCESS MESSAGE
-      ========================= */}
+        <button
+          type="button"
+          className={`vehicle-option-button ${
+            activeTab === "maintenance"
+              ? "active"
+              : ""
+          }`}
+          onClick={() =>
+            handleTabChange("maintenance")
+          }
+        >
+          <div className="vehicle-option-icon">
+            🔧
+          </div>
+
+          <div>
+            <strong>Maintenance</strong>
+
+            <small>
+              Send a vehicle for maintenance
+            </small>
+          </div>
+        </button>
+      </div>
 
       {message && (
         <div className="vehicle-success-message">
           {message}
         </div>
       )}
-
-      {/* =========================
-          ERROR MESSAGE
-      ========================= */}
 
       {error && (
         <div className="vehicle-error-message">
@@ -490,8 +678,6 @@ const VehicleManagement = ({
             onSubmit={handleAddVehicle}
           >
             <div className="vehicle-form-grid">
-              {/* VEHICLE NAME */}
-
               <div className="vehicle-form-group">
                 <label htmlFor="vehicle-name">
                   Vehicle Name *
@@ -508,8 +694,6 @@ const VehicleManagement = ({
                   required
                 />
               </div>
-
-              {/* VEHICLE TYPE */}
 
               <div className="vehicle-form-group">
                 <label htmlFor="vehicle-type">
@@ -528,8 +712,6 @@ const VehicleManagement = ({
                   <option value="HiAce">HiAce</option>
                 </select>
               </div>
-
-              {/* REGISTRATION */}
 
               <div className="vehicle-form-group">
                 <label htmlFor="registration-number">
@@ -550,8 +732,6 @@ const VehicleManagement = ({
                 />
               </div>
 
-              {/* AC TYPE */}
-
               <div className="vehicle-form-group">
                 <label htmlFor="ac-type">
                   AC Type *
@@ -571,8 +751,6 @@ const VehicleManagement = ({
                 </select>
               </div>
 
-              {/* SEATS */}
-
               <div className="vehicle-form-group">
                 <label htmlFor="total-seats">
                   Total Seats *
@@ -590,8 +768,6 @@ const VehicleManagement = ({
                   required
                 />
               </div>
-
-              {/* FUEL */}
 
               <div className="vehicle-form-group">
                 <label htmlFor="fuel-type">
@@ -623,8 +799,6 @@ const VehicleManagement = ({
                 </select>
               </div>
 
-              {/* SUITCASE */}
-
               <div className="vehicle-form-group">
                 <label htmlFor="suitcase-capacity">
                   Suitcase Capacity *
@@ -644,8 +818,6 @@ const VehicleManagement = ({
                   required
                 />
               </div>
-
-              {/* DAILY RENT */}
 
               <div className="vehicle-form-group">
                 <label htmlFor="daily-rent-price">
@@ -667,8 +839,6 @@ const VehicleManagement = ({
                   required
                 />
               </div>
-
-              {/* CITY */}
 
               <div className="vehicle-form-group">
                 <label htmlFor="city">
@@ -696,8 +866,6 @@ const VehicleManagement = ({
                 </select>
               </div>
 
-              {/* IMAGE */}
-
               <div className="vehicle-form-group vehicle-image-group">
                 <label htmlFor="vehicle-image">
                   Vehicle Image *
@@ -723,8 +891,6 @@ const VehicleManagement = ({
                 )}
               </div>
             </div>
-
-            {/* FORM ACTIONS */}
 
             <div className="vehicle-form-actions">
               <button
@@ -779,8 +945,6 @@ const VehicleManagement = ({
             </button>
           </div>
 
-          {/* LOADING */}
-
           {loadingVehicles ? (
             <div className="vehicle-loading">
               <div className="vehicle-loading-spinner"></div>
@@ -788,8 +952,6 @@ const VehicleManagement = ({
               <p>Loading vehicles...</p>
             </div>
           ) : vehicles.length === 0 ? (
-            /* EMPTY */
-
             <div className="vehicle-view-empty">
               <div className="vehicle-view-empty-icon">
                 🚗
@@ -803,8 +965,6 @@ const VehicleManagement = ({
               </p>
             </div>
           ) : (
-            /* TABLE */
-
             <>
               <div className="vehicle-table-wrapper">
                 <table className="vehicle-table">
@@ -828,11 +988,7 @@ const VehicleManagement = ({
                   <tbody>
                     {vehicles.map((vehicle) => (
                       <tr key={vehicle.id}>
-                        {/* ID */}
-
                         <td>{vehicle.id}</td>
-
-                        {/* VEHICLE */}
 
                         <td>
                           <span className="vehicle-table-name">
@@ -840,11 +996,7 @@ const VehicleManagement = ({
                           </span>
                         </td>
 
-                        {/* TYPE */}
-
                         <td>{vehicle.type}</td>
-
-                        {/* REGISTRATION */}
 
                         <td>
                           <span className="vehicle-registration">
@@ -854,25 +1006,15 @@ const VehicleManagement = ({
                           </span>
                         </td>
 
-                        {/* AC */}
-
                         <td>{vehicle.ac_type}</td>
-
-                        {/* SEATS */}
 
                         <td>{vehicle.total_seats}</td>
 
-                        {/* FUEL */}
-
                         <td>{vehicle.fuel_type}</td>
-
-                        {/* SUITCASE */}
 
                         <td>
                           {vehicle.suitcase_capacity}
                         </td>
-
-                        {/* DAILY RENT */}
 
                         <td>
                           ৳{" "}
@@ -884,11 +1026,7 @@ const VehicleManagement = ({
                           })}
                         </td>
 
-                        {/* CITY */}
-
                         <td>{vehicle.city}</td>
-
-                        {/* STATUS */}
 
                         <td>
                           <span
@@ -904,8 +1042,6 @@ const VehicleManagement = ({
                           </span>
                         </td>
 
-                        {/* ADDED */}
-
                         <td>
                           {formatDate(
                             vehicle.created_at
@@ -917,13 +1053,220 @@ const VehicleManagement = ({
                 </table>
               </div>
 
-              {/* TABLE FOOTER */}
-
               <div className="vehicle-table-footer">
                 Total Vehicles:{" "}
                 <strong>{vehicles.length}</strong>
               </div>
             </>
+          )}
+        </div>
+      )}
+
+      {/* =========================
+          MAINTENANCE
+      ========================= */}
+
+      {activeTab === "maintenance" && (
+        <div className="vehicle-section-card">
+          <div className="vehicle-section-header">
+            <div>
+              <h3>Vehicle Maintenance</h3>
+
+              <p>
+                Search a vehicle by registration number and
+                send it for maintenance if there is no active
+                booking.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="vehicle-close-button"
+              onClick={() => {
+                setActiveTab("none");
+                setMessage("");
+                setError("");
+                resetMaintenance();
+              }}
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="vehicle-maintenance-search">
+            <div className="vehicle-form-group">
+              <label htmlFor="maintenance-registration">
+                Registration Number
+              </label>
+
+              <input
+                id="maintenance-registration"
+                type="text"
+                placeholder="e.g. DHAKA-1234"
+                value={maintenanceRegistration}
+                onChange={(e) => {
+                  setMaintenanceRegistration(
+                    e.target.value
+                  );
+                  setMaintenanceVehicle(null);
+                  setMessage("");
+                  setError("");
+                }}
+              />
+            </div>
+
+            <button
+              type="button"
+              className="vehicle-submit-button"
+              onClick={handleCheckMaintenance}
+              disabled={checkingMaintenance}
+            >
+              {checkingMaintenance
+                ? "Checking..."
+                : "Search Vehicle"}
+            </button>
+          </div>
+
+          {maintenanceVehicle && (
+            <div className="vehicle-maintenance-result">
+              <div className="vehicle-maintenance-result-header">
+                <div>
+                  <h4>
+                    {maintenanceVehicle.vehicle_name}
+                  </h4>
+
+                  <p>
+                    Registration:{" "}
+                    <strong>
+                      {
+                        maintenanceVehicle.registration_number
+                      }
+                    </strong>
+                  </p>
+                </div>
+
+                <span
+                  className={`vehicle-table-status ${getStatusClass(
+                    maintenanceVehicle.availability_status
+                  )}`}
+                >
+                  <span className="vehicle-status-dot"></span>
+
+                  {getStatusText(
+                    maintenanceVehicle.availability_status
+                  )}
+                </span>
+              </div>
+
+              <div className="vehicle-maintenance-details">
+                <div>
+                  <span>Type</span>
+                  <strong>
+                    {maintenanceVehicle.type}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>City</span>
+                  <strong>
+                    {maintenanceVehicle.city}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>AC</span>
+                  <strong>
+                    {maintenanceVehicle.ac_type}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Seats</span>
+                  <strong>
+                    {maintenanceVehicle.total_seats}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Fuel</span>
+                  <strong>
+                    {maintenanceVehicle.fuel_type}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Daily Rent</span>
+                  <strong>
+                    ৳{" "}
+                    {Number(
+                      maintenanceVehicle.daily_rent_price
+                    ).toLocaleString("en-BD", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </strong>
+                </div>
+              </div>
+
+              {maintenanceVehicle.active_booking ? (
+                <div className="vehicle-maintenance-warning">
+                  <strong>
+                    Maintenance Unavailable
+                  </strong>
+
+                  <p>
+                    This vehicle cannot be sent for
+                    maintenance because it has an active
+                    booking from{" "}
+                    <strong>
+                      {formatDate(
+                        maintenanceVehicle.active_booking
+                          .start_date
+                      )}
+                    </strong>{" "}
+                    to{" "}
+                    <strong>
+                      {formatDate(
+                        maintenanceVehicle.active_booking
+                          .end_date
+                      )}
+                    </strong>
+                    .
+                  </p>
+                </div>
+              ) : maintenanceVehicle.availability_status ===
+                "maintenance" ? (
+                <div className="vehicle-maintenance-info">
+                  This vehicle is already under maintenance.
+                </div>
+              ) : (
+                <div className="vehicle-maintenance-action">
+                  <div>
+                    <strong>
+                      Vehicle is eligible for maintenance
+                    </strong>
+
+                    <p>
+                      No conflicting active booking was
+                      found.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="vehicle-maintenance-button"
+                    onClick={
+                      handleSendToMaintenance
+                    }
+                    disabled={sendingToMaintenance}
+                  >
+                    {sendingToMaintenance
+                      ? "Sending..."
+                      : "Send to Maintenance"}
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       )}
