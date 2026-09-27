@@ -15,6 +15,13 @@ interface Admin {
   role: string;
 }
 
+interface DashboardStats {
+  totalVehicles: number;
+  activeBookings: number;
+  totalCustomers: number;
+  availableVehicles: number;
+}
+
 type ActiveSection =
   | "dashboard"
   | "vehicle-management"
@@ -30,6 +37,17 @@ function AdminDashboard() {
 
   const [activeSection, setActiveSection] =
     useState<ActiveSection>("dashboard");
+
+  const [dashboardStats, setDashboardStats] =
+    useState<DashboardStats>({
+      totalVehicles: 0,
+      activeBookings: 0,
+      totalCustomers: 0,
+      availableVehicles: 0,
+    });
+
+  const [statsLoading, setStatsLoading] =
+    useState<boolean>(true);
 
   // =====================================================
   // CHECK ADMIN LOGIN
@@ -61,6 +79,60 @@ function AdminDashboard() {
 
     loadAdmin();
   }, [navigate]);
+
+  // =====================================================
+  // LOAD DASHBOARD STATISTICS
+  // =====================================================
+
+  useEffect(() => {
+    const loadDashboardStats = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        return;
+      }
+
+      try {
+        setStatsLoading(true);
+
+        const response = await fetch(
+          "http://localhost:5000/api/admin/dashboard/stats",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.message ||
+              "Failed to fetch dashboard statistics"
+          );
+        }
+
+        setDashboardStats({
+          totalVehicles: data.stats.totalVehicles,
+          activeBookings: data.stats.activeBookings,
+          totalCustomers: data.stats.totalCustomers,
+          availableVehicles:
+            data.stats.availableVehicles,
+        });
+      } catch (error) {
+        console.error(
+          "Dashboard statistics error:",
+          error
+        );
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+
+    loadDashboardStats();
+  }, []);
 
   // =====================================================
   // LOGOUT
@@ -367,7 +439,9 @@ function AdminDashboard() {
                   </span>
 
                   <strong>
-                    0
+                    {statsLoading
+                      ? "..."
+                      : dashboardStats.totalVehicles}
                   </strong>
                 </div>
 
@@ -387,7 +461,9 @@ function AdminDashboard() {
                   </span>
 
                   <strong>
-                    0
+                    {statsLoading
+                      ? "..."
+                      : dashboardStats.activeBookings}
                   </strong>
                 </div>
 
@@ -407,7 +483,9 @@ function AdminDashboard() {
                   </span>
 
                   <strong>
-                    0
+                    {statsLoading
+                      ? "..."
+                      : dashboardStats.totalCustomers}
                   </strong>
                 </div>
 
@@ -427,7 +505,9 @@ function AdminDashboard() {
                   </span>
 
                   <strong>
-                    0
+                    {statsLoading
+                      ? "..."
+                      : dashboardStats.availableVehicles}
                   </strong>
                 </div>
 
