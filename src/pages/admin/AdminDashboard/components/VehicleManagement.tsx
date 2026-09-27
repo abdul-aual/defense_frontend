@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./VehicleManagement.css";
+
 interface Vehicle {
   id: number;
   vehicle_name: string;
@@ -9,9 +10,9 @@ interface Vehicle {
   total_seats: number;
   fuel_type: string;
   suitcase_capacity: number;
-  daily_rent_price: number;
+  daily_rent_price: number | string;
   city: string;
-  availability_status: "available" | "booked" | "maintenance";
+  availability_status: "available" | "Booked" | "maintenance";
   image?: string | null;
   created_at?: string;
 }
@@ -56,7 +57,7 @@ const VehicleManagement = ({
   onBack,
 }: VehicleManagementProps) => {
   const [activeTab, setActiveTab] = useState<
-    "none" | "add" | "manage"
+    "none" | "add" | "view" | "manage"
   >("none");
 
   const [form, setForm] =
@@ -66,9 +67,13 @@ const VehicleManagement = ({
   const [searching, setSearching] = useState(false);
   const [maintenanceLoading, setMaintenanceLoading] =
     useState(false);
+  const [loadingVehicles, setLoadingVehicles] =
+    useState(false);
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
   const [searchRegistration, setSearchRegistration] =
     useState("");
@@ -279,6 +284,52 @@ const VehicleManagement = ({
     }
   };
 
+  /* =========================
+     VIEW ALL VEHICLES
+  ========================= */
+
+  const handleViewVehicles = async () => {
+    setMessage("");
+    setError("");
+
+    if (!token) {
+      setError("Authentication token not found.");
+      return;
+    }
+
+    try {
+      setLoadingVehicles(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/vehicle",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to fetch vehicles."
+        );
+      }
+
+      setVehicles(data.vehicles || []);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch vehicles."
+      );
+    } finally {
+      setLoadingVehicles(false);
+    }
+  };
+
   const handleSearchVehicle = async (
     e: React.FormEvent
   ) => {
@@ -455,7 +506,7 @@ const VehicleManagement = ({
       case "available":
         return "available";
 
-      case "booked":
+      case "Booked":
         return "booked";
 
       case "maintenance":
@@ -473,7 +524,7 @@ const VehicleManagement = ({
       case "available":
         return "Available";
 
-      case "booked":
+      case "Booked":
         return "Booked";
 
       case "maintenance":
@@ -482,6 +533,14 @@ const VehicleManagement = ({
       default:
         return status;
     }
+  };
+
+  const formatDate = (date?: string) => {
+    if (!date) return "-";
+
+    return new Date(date).toLocaleDateString(
+      "en-GB"
+    );
   };
 
   return (
@@ -499,12 +558,13 @@ const VehicleManagement = ({
         <h2>Vehicle Management</h2>
 
         <p>
-          Add new vehicles and manage vehicle
-          availability.
+          Add, view and manage Rentwise vehicles.
         </p>
       </div>
 
       <div className="vehicle-management-options">
+
+        {/* ADD VEHICLE */}
 
         <button
           type="button"
@@ -513,7 +573,9 @@ const VehicleManagement = ({
           }`}
           onClick={() => {
             setActiveTab(
-              activeTab === "add" ? "none" : "add"
+              activeTab === "add"
+                ? "none"
+                : "add"
             );
             setMessage("");
             setError("");
@@ -525,11 +587,49 @@ const VehicleManagement = ({
 
           <span>
             <strong>Add New Vehicle</strong>
+
             <small>
               Add a vehicle to Rentwise
             </small>
           </span>
         </button>
+
+        {/* VIEW VEHICLES */}
+
+        <button
+          type="button"
+          className={`vehicle-option-button ${
+            activeTab === "view" ? "active" : ""
+          }`}
+          onClick={() => {
+            const newTab =
+              activeTab === "view"
+                ? "none"
+                : "view";
+
+            setActiveTab(newTab);
+            setMessage("");
+            setError("");
+
+            if (newTab === "view") {
+              handleViewVehicles();
+            }
+          }}
+        >
+          <span className="vehicle-option-icon">
+            ☷
+          </span>
+
+          <span>
+            <strong>View Vehicles</strong>
+
+            <small>
+              View all vehicles and their status
+            </small>
+          </span>
+        </button>
+
+        {/* MAINTENANCE */}
 
         <button
           type="button"
@@ -547,11 +647,12 @@ const VehicleManagement = ({
           }}
         >
           <span className="vehicle-option-icon">
-          🛠️
+            🛠️
           </span>
 
           <span>
             <strong>Maintenance</strong>
+
             <small>
               Send vehicles for repair and maintenance
             </small>
@@ -572,12 +673,17 @@ const VehicleManagement = ({
         </div>
       )}
 
+      {/* =========================
+          ADD VEHICLE
+      ========================= */}
+
       {activeTab === "add" && (
         <div className="vehicle-section-card">
 
           <div className="vehicle-section-header">
             <div>
               <h3>Add New Vehicle</h3>
+
               <p>
                 Enter the vehicle information below.
               </p>
@@ -586,7 +692,9 @@ const VehicleManagement = ({
             <button
               type="button"
               className="vehicle-close-button"
-              onClick={() => setActiveTab("none")}
+              onClick={() =>
+                setActiveTab("none")
+              }
             >
               ×
             </button>
@@ -842,6 +950,186 @@ const VehicleManagement = ({
         </div>
       )}
 
+      {/* =========================
+          VIEW ALL VEHICLES
+      ========================= */}
+
+      {activeTab === "view" && (
+        <div className="vehicle-section-card">
+
+          <div className="vehicle-section-header">
+            <div>
+              <h3>All Vehicles</h3>
+
+              <p>
+                View all vehicles currently registered
+                in Rentwise.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              className="vehicle-close-button"
+              onClick={() =>
+                setActiveTab("none")
+              }
+            >
+              ×
+            </button>
+          </div>
+
+          {loadingVehicles ? (
+            <div className="vehicle-loading">
+              <div className="vehicle-loading-spinner"></div>
+
+              <p>
+                Loading vehicles...
+              </p>
+            </div>
+          ) : vehicles.length === 0 ? (
+            <div className="vehicle-view-empty">
+              <div className="vehicle-view-empty-icon">
+                🚗
+              </div>
+
+              <h3>
+                No Vehicles Found
+              </h3>
+
+              <p>
+                There are currently no vehicles
+                registered in Rentwise.
+              </p>
+            </div>
+          ) : (
+            <div className="vehicle-table-wrapper">
+
+              <table className="vehicle-table">
+
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Vehicle</th>
+                    <th>Type</th>
+                    <th>Registration</th>
+                    <th>AC</th>
+                    <th>Seats</th>
+                    <th>Fuel</th>
+                    <th>Suitcase</th>
+                    <th>Daily Rent</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th>Added</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {vehicles.map((vehicle) => (
+                    <tr key={vehicle.id}>
+
+                      <td>
+                        #{vehicle.id}
+                      </td>
+
+                      <td>
+                        <strong className="vehicle-table-name">
+                          {vehicle.vehicle_name}
+                        </strong>
+                      </td>
+
+                      <td>
+                        {vehicle.type}
+                      </td>
+
+                      <td>
+                        <span className="vehicle-registration">
+                          {vehicle.registration_number}
+                        </span>
+                      </td>
+
+                      <td>
+                        {vehicle.ac_type}
+                      </td>
+
+                      <td>
+                        {vehicle.total_seats}
+                      </td>
+
+                      <td>
+                        {vehicle.fuel_type}
+                      </td>
+
+                      <td>
+                        {vehicle.suitcase_capacity}
+                      </td>
+
+                      <td>
+                        <strong>
+                          ৳{" "}
+                          {Number(
+                            vehicle.daily_rent_price
+                          ).toLocaleString(
+                            "en-BD",
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            }
+                          )}
+                        </strong>
+                      </td>
+
+                      <td>
+                        {vehicle.city}
+                      </td>
+
+                      <td>
+                        <span
+                          className={`vehicle-table-status ${getStatusClass(
+                            vehicle.availability_status
+                          )}`}
+                        >
+                          <span className="vehicle-status-dot"></span>
+
+                          {getStatusText(
+                            vehicle.availability_status
+                          )}
+                        </span>
+                      </td>
+
+                      <td>
+                        {formatDate(
+                          vehicle.created_at
+                        )}
+                      </td>
+
+                    </tr>
+                  ))}
+                </tbody>
+
+              </table>
+
+            </div>
+          )}
+
+          {!loadingVehicles &&
+            vehicles.length > 0 && (
+              <div className="vehicle-table-footer">
+                <span>
+                  Total Vehicles:{" "}
+                  <strong>
+                    {vehicles.length}
+                  </strong>
+                </span>
+              </div>
+            )}
+
+        </div>
+      )}
+
+      {/* =========================
+          MAINTENANCE
+      ========================= */}
+
       {activeTab === "manage" && (
         <div className="vehicle-section-card">
 
@@ -859,7 +1147,9 @@ const VehicleManagement = ({
             <button
               type="button"
               className="vehicle-close-button"
-              onClick={() => setActiveTab("none")}
+              onClick={() =>
+                setActiveTab("none")
+              }
             >
               ×
             </button>
@@ -943,6 +1233,7 @@ const VehicleManagement = ({
             <div className="vehicle-search-result">
 
               <div className="vehicle-result-header">
+
                 <div>
                   <h3>
                     {
@@ -970,6 +1261,7 @@ const VehicleManagement = ({
                     ? "Available"
                     : "Unavailable"}
                 </span>
+
               </div>
 
               <div className="vehicle-result-details">
@@ -1114,10 +1406,3 @@ const VehicleManagement = ({
 };
 
 export default VehicleManagement;
-
-
-
-
-
-
-
