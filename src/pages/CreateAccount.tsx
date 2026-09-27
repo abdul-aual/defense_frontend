@@ -1,10 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { useState } from "react";
 import PasswordInput from "../pages/admin/AdminDashboard/components/PasswordInput";
 import "./CreateAccount.css";
 
 function CreateAccount() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -14,10 +18,22 @@ function CreateAccount() {
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [errors, setErrors] = useState<
+    Record<string, string>
+  >({});
+
+  const [isSubmitting, setIsSubmitting] =
+    useState(false);
+
+  const [serverError, setServerError] =
+    useState("");
+
+  const [showSuccess, setShowSuccess] =
+    useState(false);
+
+  /* =========================================================
+     HANDLE INPUT CHANGE
+  ========================================================= */
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -37,30 +53,46 @@ function CreateAccount() {
     setServerError("");
   };
 
+  /* =========================================================
+     FORM VALIDATION
+  ========================================================= */
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Full name is required.";
+      newErrors.name =
+        "Full name is required.";
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required.";
-    } else if (!/^01[0-9]{9}$/.test(formData.phone)) {
+      newErrors.phone =
+        "Phone number is required.";
+    } else if (
+      !/^01[0-9]{9}$/.test(
+        formData.phone
+      )
+    ) {
       newErrors.phone =
         "Enter a valid 11-digit phone number (01XXXXXXXXX).";
     }
 
     if (
       formData.email.trim() &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        formData.email
+      )
     ) {
-      newErrors.email = "Enter a valid email address.";
+      newErrors.email =
+        "Enter a valid email address.";
     }
 
     if (!formData.password) {
-      newErrors.password = "Password is required.";
-    } else if (formData.password.length < 4) {
+      newErrors.password =
+        "Password is required.";
+    } else if (
+      formData.password.length < 4
+    ) {
       newErrors.password =
         "Password must be at least 4 characters.";
     }
@@ -69,7 +101,8 @@ function CreateAccount() {
       newErrors.confirmPassword =
         "Please confirm your password.";
     } else if (
-      formData.password !== formData.confirmPassword
+      formData.password !==
+      formData.confirmPassword
     ) {
       newErrors.confirmPassword =
         "Passwords do not match.";
@@ -77,10 +110,18 @@ function CreateAccount() {
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0;
+    return (
+      Object.keys(newErrors).length === 0
+    );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /* =========================================================
+     CREATE ACCOUNT
+  ========================================================= */
+
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
 
     setServerError("");
@@ -96,34 +137,70 @@ function CreateAccount() {
         "http://localhost:5000/api/customer/register",
         {
           method: "POST",
+
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
           },
+
           body: JSON.stringify({
             name: formData.name.trim(),
             phone: formData.phone.trim(),
-            email: formData.email.trim() || null,
-            password: formData.password,
+            email:
+              formData.email.trim() ||
+              null,
+            password:
+              formData.password,
           }),
         }
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
+
+      /* -------------------------------------------------------
+         REGISTRATION ERROR
+      ------------------------------------------------------- */
 
       if (!response.ok) {
         setServerError(
-          data.message || "Registration failed."
+          data.message ||
+            "Registration failed."
         );
+
         return;
       }
 
+      /* -------------------------------------------------------
+         ACCOUNT CREATED
+      ------------------------------------------------------- */
+
       setShowSuccess(true);
 
+      /* =======================================================
+         REDIRECT TO LOGIN
+         
+         If the customer originally came from the Booking page,
+         preserve the booking information while going to Login.
+      ======================================================= */
+
       setTimeout(() => {
-        navigate("/login");
+        navigate("/login", {
+          state: {
+            returnTo:
+              location.state?.returnTo,
+
+            bookingState:
+              location.state?.bookingState,
+          },
+        });
       }, 2000);
+
     } catch (error) {
-      console.error("Registration Error:", error);
+      console.error(
+        "Registration Error:",
+        error
+      );
 
       setServerError(
         "Unable to connect to the server. Please try again."
@@ -135,46 +212,83 @@ function CreateAccount() {
 
   return (
     <>
+      {/* =====================================================
+          SUCCESS TOAST
+      ===================================================== */}
+
       {showSuccess && (
         <div className="success-toast">
-          <div className="success-icon">✓</div>
+
+          <div className="success-icon">
+            ✓
+          </div>
 
           <div className="success-content">
-            <strong>Account Created Successfully</strong>
+
+            <strong>
+              Account Created Successfully
+            </strong>
+
             <span>
-              Your account has been created. Redirecting to
-              login...
+              Your account has been created.
+              Redirecting to login...
             </span>
+
           </div>
+
         </div>
       )}
 
+      {/* =====================================================
+          CREATE ACCOUNT PAGE
+      ===================================================== */}
+
       <div className="create-account-page">
+
         <div className="create-account-card">
+
+          {/* LOGO */}
 
           <div className="create-account-logo">
             Rentwise
           </div>
 
-          <h1>Create Account</h1>
+          {/* HEADER */}
+
+          <h1>
+            Create Account
+          </h1>
 
           <p className="create-account-subtitle">
             Create your Rentwise account and start your journey
           </p>
 
+          {/* =================================================
+              FORM
+          ================================================= */}
+
           <form onSubmit={handleSubmit}>
 
+            {/* FULL NAME */}
+
             <div className="create-form-group">
+
               <label>
                 Full Name{" "}
-                <span className="required-star">*</span>
+                <span className="required-star">
+                  *
+                </span>
               </label>
 
               <input
                 type="text"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
+                value={
+                  formData.name
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Enter your full name"
               />
 
@@ -183,19 +297,29 @@ function CreateAccount() {
                   {errors.name}
                 </p>
               )}
+
             </div>
 
+            {/* PHONE */}
+
             <div className="create-form-group">
+
               <label>
                 Phone Number{" "}
-                <span className="required-star">*</span>
+                <span className="required-star">
+                  *
+                </span>
               </label>
 
               <input
                 type="tel"
                 name="phone"
-                value={formData.phone}
-                onChange={handleChange}
+                value={
+                  formData.phone
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="01XXXXXXXXX"
                 maxLength={11}
                 inputMode="numeric"
@@ -206,9 +330,13 @@ function CreateAccount() {
                   {errors.phone}
                 </p>
               )}
+
             </div>
 
+            {/* EMAIL */}
+
             <div className="create-form-group">
+
               <label>
                 Email{" "}
                 <span className="optional-text">
@@ -219,8 +347,12 @@ function CreateAccount() {
               <input
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
+                value={
+                  formData.email
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Enter your email address"
               />
 
@@ -229,19 +361,29 @@ function CreateAccount() {
                   {errors.email}
                 </p>
               )}
+
             </div>
 
+            {/* PASSWORD */}
+
             <div className="create-form-group">
+
               <label>
                 Password{" "}
-                <span className="required-star">*</span>
+                <span className="required-star">
+                  *
+                </span>
               </label>
 
               <PasswordInput
                 id="password"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
+                value={
+                  formData.password
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Enter your password"
               />
 
@@ -250,19 +392,29 @@ function CreateAccount() {
                   {errors.password}
                 </p>
               )}
+
             </div>
 
+            {/* CONFIRM PASSWORD */}
+
             <div className="create-form-group">
+
               <label>
                 Confirm Password{" "}
-                <span className="required-star">*</span>
+                <span className="required-star">
+                  *
+                </span>
               </label>
 
               <PasswordInput
                 id="confirmPassword"
                 name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
+                value={
+                  formData.confirmPassword
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Re-enter your password"
               />
 
@@ -271,7 +423,10 @@ function CreateAccount() {
                   {errors.confirmPassword}
                 </p>
               )}
+
             </div>
+
+            {/* SERVER ERROR */}
 
             {serverError && (
               <div className="server-error">
@@ -279,10 +434,14 @@ function CreateAccount() {
               </div>
             )}
 
+            {/* CREATE ACCOUNT BUTTON */}
+
             <button
               type="submit"
               className="create-account-btn"
-              disabled={isSubmitting}
+              disabled={
+                isSubmitting
+              }
             >
               {isSubmitting
                 ? "Creating Account..."
@@ -291,19 +450,39 @@ function CreateAccount() {
 
           </form>
 
+          {/* =================================================
+              LOGIN LINK
+          ================================================= */}
+
           <p className="already-account">
+
             Already have an account?
 
             <button
               type="button"
               className="login-link"
-              onClick={() => navigate("/login")}
+              onClick={() =>
+                navigate(
+                  "/login",
+                  {
+                    state: {
+                      returnTo:
+                        location.state?.returnTo,
+
+                      bookingState:
+                        location.state?.bookingState,
+                    },
+                  }
+                )
+              }
             >
               Login
             </button>
+
           </p>
 
         </div>
+
       </div>
     </>
   );
