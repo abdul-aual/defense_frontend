@@ -12,7 +12,7 @@ interface Vehicle {
   suitcase_capacity: number;
   daily_rent_price: number | string;
   city: string;
-  availability_status: "available" | "Booked" | "maintenance";
+  availability_status: "available" | "Booked";
   image?: string | null;
   created_at?: string;
 }
@@ -21,52 +21,38 @@ interface VehicleManagementProps {
   onBack: () => void;
 }
 
-interface VehicleForm {
-  vehicle_name: string;
-  type: string;
-  registration_number: string;
-  ac_type: string;
-  total_seats: string;
-  fuel_type: string;
-  suitcase_capacity: string;
-  daily_rent_price: string;
-  city: string;
-  image: File | null;
-}
-
-interface SearchResult {
-  vehicle: Vehicle;
-  available: boolean;
-  message?: string;
-}
-
-const initialForm: VehicleForm = {
-  vehicle_name: "",
-  type: "",
-  registration_number: "",
-  ac_type: "",
-  total_seats: "",
-  fuel_type: "",
-  suitcase_capacity: "",
-  daily_rent_price: "",
-  city: "",
-  image: null,
-};
-
 const VehicleManagement = ({
   onBack,
 }: VehicleManagementProps) => {
+  const token = localStorage.getItem("token");
+
   const [activeTab, setActiveTab] = useState<
-    "none" | "add" | "view" | "manage"
+    "none" | "add" | "view"
   >("none");
 
-  const [form, setForm] =
-    useState<VehicleForm>(initialForm);
+  // =========================
+  // ADD VEHICLE STATES
+  // =========================
+
+  const [vehicleName, setVehicleName] = useState("");
+  const [vehicleType, setVehicleType] = useState("car");
+  const [registrationNumber, setRegistrationNumber] = useState("");
+  const [acType, setAcType] = useState("AC");
+  const [totalSeats, setTotalSeats] = useState("");
+  const [fuelType, setFuelType] = useState("Petrol");
+  const [suitcaseCapacity, setSuitcaseCapacity] =
+    useState("");
+  const [dailyRentPrice, setDailyRentPrice] =
+    useState("");
+  const [city, setCity] = useState("Dhaka");
+  const [vehicleImage, setVehicleImage] =
+    useState<File | null>(null);
+
+  // =========================
+  // GENERAL STATES
+  // =========================
 
   const [saving, setSaving] = useState(false);
-  const [searching, setSearching] = useState(false);
-  const [maintenanceLoading, setMaintenanceLoading] =
-    useState(false);
   const [loadingVehicles, setLoadingVehicles] =
     useState(false);
 
@@ -75,218 +61,9 @@ const VehicleManagement = ({
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-  const [searchRegistration, setSearchRegistration] =
-    useState("");
-  const [searchDate, setSearchDate] = useState("");
-  const [searchStartTime, setSearchStartTime] =
-    useState("");
-  const [searchEndTime, setSearchEndTime] =
-    useState("");
-
-  const [searchResult, setSearchResult] =
-    useState<SearchResult | null>(null);
-
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (!message) return;
-
-    const timer = setTimeout(() => {
-      setMessage("");
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [message]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0] || null;
-
-    setError("");
-    setMessage("");
-
-    if (!file) {
-      setForm((prev) => ({
-        ...prev,
-        image: null,
-      }));
-      return;
-    }
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      setError(
-        "Invalid image format. Please select JPG, JPEG, PNG or WEBP."
-      );
-
-      e.target.value = "";
-
-      setForm((prev) => ({
-        ...prev,
-        image: null,
-      }));
-
-      return;
-    }
-
-    const maxSize = 5 * 1024 * 1024;
-
-    if (file.size > maxSize) {
-      setError("Image size must not exceed 5 MB.");
-
-      e.target.value = "";
-
-      setForm((prev) => ({
-        ...prev,
-        image: null,
-      }));
-
-      return;
-    }
-
-    setForm((prev) => ({
-      ...prev,
-      image: file,
-    }));
-  };
-
-  const resetForm = () => {
-    setForm(initialForm);
-    setError("");
-  };
-
-  const handleAddVehicle = async (
-    e: React.FormEvent
-  ) => {
-    e.preventDefault();
-
-    setMessage("");
-    setError("");
-
-    if (!token) {
-      setError("Authentication token not found.");
-      return;
-    }
-
-    if (!form.image) {
-      setError(
-        "Vehicle image is required. Please select an image."
-      );
-      return;
-    }
-
-    if (
-      !form.vehicle_name ||
-      !form.type ||
-      !form.registration_number ||
-      !form.ac_type ||
-      !form.total_seats ||
-      !form.fuel_type ||
-      form.suitcase_capacity === "" ||
-      !form.daily_rent_price ||
-      !form.city
-    ) {
-      setError("Please fill in all required fields.");
-      return;
-    }
-
-    try {
-      setSaving(true);
-
-      const formData = new FormData();
-
-      formData.append(
-        "vehicle_name",
-        form.vehicle_name
-      );
-
-      formData.append("type", form.type);
-
-      formData.append(
-        "registration_number",
-        form.registration_number
-      );
-
-      formData.append("ac_type", form.ac_type);
-
-      formData.append(
-        "total_seats",
-        form.total_seats
-      );
-
-      formData.append(
-        "fuel_type",
-        form.fuel_type
-      );
-
-      formData.append(
-        "suitcase_capacity",
-        form.suitcase_capacity
-      );
-
-      formData.append(
-        "daily_rent_price",
-        form.daily_rent_price
-      );
-
-      formData.append("city", form.city);
-
-      formData.append("image", form.image);
-
-      const response = await fetch(
-        "http://localhost:5000/api/vehicle",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || "Failed to add vehicle."
-        );
-      }
-
-      setMessage("Vehicle added successfully.");
-      resetForm();
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to add vehicle."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  /* =========================
-     VIEW ALL VEHICLES
-  ========================= */
+  // =========================
+  // LOAD VEHICLES
+  // =========================
 
   const handleViewVehicles = async () => {
     setMessage("");
@@ -330,64 +107,159 @@ const VehicleManagement = ({
     }
   };
 
-  const handleSearchVehicle = async (
-    e: React.FormEvent
+  // =========================
+  // VIEW TAB
+  // =========================
+
+  useEffect(() => {
+    if (activeTab === "view") {
+      handleViewVehicles();
+    }
+  }, [activeTab]);
+
+  // =========================
+  // IMAGE HANDLER
+  // =========================
+
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      setVehicleImage(null);
+      return;
+    }
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      setError(
+        "Only JPG, JPEG, PNG and WEBP images are allowed."
+      );
+      e.target.value = "";
+      setVehicleImage(null);
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image size must be less than 5 MB.");
+      e.target.value = "";
+      setVehicleImage(null);
+      return;
+    }
+
+    setError("");
+    setVehicleImage(file);
+  };
+
+  // =========================
+  // RESET FORM
+  // =========================
+
+  const resetForm = () => {
+    setVehicleName("");
+    setVehicleType("car");
+    setRegistrationNumber("");
+    setAcType("AC");
+    setTotalSeats("");
+    setFuelType("Petrol");
+    setSuitcaseCapacity("");
+    setDailyRentPrice("");
+    setCity("Dhaka");
+    setVehicleImage(null);
+
+    const fileInput = document.getElementById(
+      "vehicle-image"
+    ) as HTMLInputElement | null;
+
+    if (fileInput) {
+      fileInput.value = "";
+    }
+  };
+
+  // =========================
+  // ADD VEHICLE
+  // =========================
+
+  const handleAddVehicle = async (
+    e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
     setMessage("");
     setError("");
-    setSearchResult(null);
 
     if (!token) {
       setError("Authentication token not found.");
       return;
     }
 
-    if (!searchRegistration.trim()) {
-      setError(
-        "Please enter a registration number."
-      );
+    if (!vehicleImage) {
+      setError("Please select a vehicle image.");
       return;
     }
 
-    if (!searchDate) {
-      setError("Please select a date.");
+    if (
+      !vehicleName ||
+      !registrationNumber ||
+      !totalSeats ||
+      !suitcaseCapacity ||
+      !dailyRentPrice
+    ) {
+      setError("Please fill in all required fields.");
       return;
     }
 
-    if (!searchStartTime || !searchEndTime) {
+    if (
+      Number(totalSeats) <= 0 ||
+      Number(suitcaseCapacity) < 0 ||
+      Number(dailyRentPrice) <= 0
+    ) {
       setError(
-        "Please select start and end time."
-      );
-      return;
-    }
-
-    if (searchEndTime <= searchStartTime) {
-      setError(
-        "End time must be later than start time."
+        "Please enter valid values for seats, suitcase capacity and daily rent."
       );
       return;
     }
 
     try {
-      setSearching(true);
+      setSaving(true);
 
-      const params = new URLSearchParams({
-        registration_number:
-          searchRegistration.trim(),
-        date: searchDate,
-        start_time: searchStartTime,
-        end_time: searchEndTime,
-      });
+      const formData = new FormData();
+
+      formData.append("vehicle_name", vehicleName);
+      formData.append("type", vehicleType);
+      formData.append(
+        "registration_number",
+        registrationNumber
+      );
+      formData.append("ac_type", acType);
+      formData.append("total_seats", totalSeats);
+      formData.append("fuel_type", fuelType);
+      formData.append(
+        "suitcase_capacity",
+        suitcaseCapacity
+      );
+      formData.append(
+        "daily_rent_price",
+        dailyRentPrice
+      );
+      formData.append("city", city);
+      formData.append("image", vehicleImage);
 
       const response = await fetch(
-        `http://localhost:5000/api/vehicle/search?${params.toString()}`,
+        "http://localhost:5000/api/vehicle",
         {
-          method: "GET",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          body: formData,
         }
       );
 
@@ -395,156 +267,107 @@ const VehicleManagement = ({
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Vehicle search failed."
-        );
-      }
-
-      setSearchResult({
-        vehicle: data.vehicle,
-        available:
-          data.available ??
-          data.vehicle?.availability_status ===
-            "available",
-        message: data.message,
-      });
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Vehicle search failed."
-      );
-    } finally {
-      setSearching(false);
-    }
-  };
-
-  const handleSendToMaintenance = async () => {
-    setMessage("");
-    setError("");
-
-    if (!token) {
-      setError("Authentication token not found.");
-      return;
-    }
-
-    if (!searchResult?.vehicle) {
-      setError(
-        "Please search for a vehicle first."
-      );
-      return;
-    }
-
-    if (!searchResult.available) {
-      setError(
-        "This vehicle is not available for the selected time."
-      );
-      return;
-    }
-
-    try {
-      setMaintenanceLoading(true);
-
-      const startDateTime = `${searchDate}T${searchStartTime}`;
-      const endDateTime = `${searchDate}T${searchEndTime}`;
-
-      const response = await fetch(
-        "http://localhost:5000/api/vehicle/maintenance",
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            registration_number:
-              searchResult.vehicle
-                .registration_number,
-            start_date: startDateTime,
-            end_date: endDateTime,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-            "Failed to send vehicle to maintenance."
+          data.message || "Failed to add vehicle."
         );
       }
 
       setMessage(
-        "Vehicle has been scheduled for maintenance successfully."
+        data.message || "Vehicle added successfully."
       );
 
-      setSearchResult((prev) =>
-        prev
-          ? {
-              ...prev,
-              available: false,
-              message:
-                "Vehicle is scheduled for maintenance for the selected period.",
-            }
-          : null
-      );
+      resetForm();
+
+      // If View Vehicles was previously opened,
+      // refresh the vehicle list after adding.
+      if (activeTab === "view") {
+        handleViewVehicles();
+      }
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to send vehicle to maintenance."
+          : "Failed to add vehicle."
       );
     } finally {
-      setMaintenanceLoading(false);
+      setSaving(false);
     }
   };
+
+  // =========================
+  // STATUS
+  // =========================
 
   const getStatusClass = (
     status: Vehicle["availability_status"]
   ) => {
-    switch (status) {
-      case "available":
-        return "available";
-
-      case "Booked":
-        return "booked";
-
-      case "maintenance":
-        return "maintenance";
-
-      default:
-        return "";
+    if (status === "available") {
+      return "available";
     }
+
+    if (status === "Booked") {
+      return "booked";
+    }
+
+    return "";
   };
 
   const getStatusText = (
     status: Vehicle["availability_status"]
   ) => {
-    switch (status) {
-      case "available":
-        return "Available";
-
-      case "Booked":
-        return "Booked";
-
-      case "maintenance":
-        return "Maintenance";
-
-      default:
-        return status;
+    if (status === "available") {
+      return "Available";
     }
+
+    if (status === "Booked") {
+      return "Booked";
+    }
+
+    return status;
   };
+
+  // =========================
+  // DATE FORMAT
+  // =========================
 
   const formatDate = (date?: string) => {
-    if (!date) return "-";
+    if (!date) {
+      return "-";
+    }
 
-    return new Date(date).toLocaleDateString(
-      "en-GB"
-    );
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return "-";
+    }
+
+    return parsedDate.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
   };
+
+  // =========================
+  // TAB CHANGE
+  // =========================
+
+  const handleTabChange = (
+    tab: "add" | "view"
+  ) => {
+    setMessage("");
+    setError("");
+    setActiveTab(tab);
+  };
+
+  // =========================
+  // RENDER
+  // =========================
 
   return (
     <div className="vehicle-management">
+      {/* =========================
+          HEADER
+      ========================= */}
 
       <div className="vehicle-management-header">
         <button
@@ -558,12 +381,16 @@ const VehicleManagement = ({
         <h2>Vehicle Management</h2>
 
         <p>
-          Add, view and manage Rentwise vehicles.
+          Add new vehicles and view all vehicles registered
+          in Rentwise.
         </p>
       </div>
 
-      <div className="vehicle-management-options">
+      {/* =========================
+          TOP OPTIONS
+      ========================= */}
 
+      <div className="vehicle-management-options">
         {/* ADD VEHICLE */}
 
         <button
@@ -571,27 +398,19 @@ const VehicleManagement = ({
           className={`vehicle-option-button ${
             activeTab === "add" ? "active" : ""
           }`}
-          onClick={() => {
-            setActiveTab(
-              activeTab === "add"
-                ? "none"
-                : "add"
-            );
-            setMessage("");
-            setError("");
-          }}
+          onClick={() => handleTabChange("add")}
         >
-          <span className="vehicle-option-icon">
-            ＋
-          </span>
+          <div className="vehicle-option-icon">
+            +
+          </div>
 
-          <span>
+          <div>
             <strong>Add New Vehicle</strong>
 
             <small>
-              Add a vehicle to Rentwise
+              Register a new vehicle in the system
             </small>
-          </span>
+          </div>
         </button>
 
         {/* VIEW VEHICLES */}
@@ -601,71 +420,35 @@ const VehicleManagement = ({
           className={`vehicle-option-button ${
             activeTab === "view" ? "active" : ""
           }`}
-          onClick={() => {
-            const newTab =
-              activeTab === "view"
-                ? "none"
-                : "view";
-
-            setActiveTab(newTab);
-            setMessage("");
-            setError("");
-
-            if (newTab === "view") {
-              handleViewVehicles();
-            }
-          }}
+          onClick={() => handleTabChange("view")}
         >
-          <span className="vehicle-option-icon">
-            ☷
-          </span>
+          <div className="vehicle-option-icon">
+            🚗
+          </div>
 
-          <span>
+          <div>
             <strong>View Vehicles</strong>
 
             <small>
-              View all vehicles and their status
+              View all vehicles and their current status
             </small>
-          </span>
+          </div>
         </button>
-
-        {/* MAINTENANCE */}
-
-        <button
-          type="button"
-          className={`vehicle-option-button ${
-            activeTab === "manage" ? "active" : ""
-          }`}
-          onClick={() => {
-            setActiveTab(
-              activeTab === "manage"
-                ? "none"
-                : "manage"
-            );
-            setMessage("");
-            setError("");
-          }}
-        >
-          <span className="vehicle-option-icon">
-            🛠️
-          </span>
-
-          <span>
-            <strong>Maintenance</strong>
-
-            <small>
-              Send vehicles for repair and maintenance
-            </small>
-          </span>
-        </button>
-
       </div>
+
+      {/* =========================
+          SUCCESS MESSAGE
+      ========================= */}
 
       {message && (
         <div className="vehicle-success-message">
           {message}
         </div>
       )}
+
+      {/* =========================
+          ERROR MESSAGE
+      ========================= */}
 
       {error && (
         <div className="vehicle-error-message">
@@ -679,22 +462,24 @@ const VehicleManagement = ({
 
       {activeTab === "add" && (
         <div className="vehicle-section-card">
-
           <div className="vehicle-section-header">
             <div>
               <h3>Add New Vehicle</h3>
 
               <p>
-                Enter the vehicle information below.
+                Enter the vehicle information below to add it
+                to Rentwise.
               </p>
             </div>
 
             <button
               type="button"
               className="vehicle-close-button"
-              onClick={() =>
-                setActiveTab("none")
-              }
+              onClick={() => {
+                setActiveTab("none");
+                setMessage("");
+                setError("");
+              }}
             >
               ×
             </button>
@@ -704,120 +489,122 @@ const VehicleManagement = ({
             className="vehicle-form"
             onSubmit={handleAddVehicle}
           >
-
             <div className="vehicle-form-grid">
+              {/* VEHICLE NAME */}
 
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="vehicle-name">
                   Vehicle Name *
                 </label>
 
                 <input
+                  id="vehicle-name"
                   type="text"
-                  name="vehicle_name"
-                  value={form.vehicle_name}
-                  onChange={handleInputChange}
-                  placeholder="e.g. Toyota Premio"
-                />
-              </div>
-
-              <div className="vehicle-form-group">
-                <label>
-                  Registration Number *
-                </label>
-
-                <input
-                  type="text"
-                  name="registration_number"
-                  value={
-                    form.registration_number
+                  placeholder="Enter vehicle name"
+                  value={vehicleName}
+                  onChange={(e) =>
+                    setVehicleName(e.target.value)
                   }
-                  onChange={handleInputChange}
-                  placeholder="e.g. DHA-METRO-GA-1234"
+                  required
                 />
               </div>
 
+              {/* VEHICLE TYPE */}
+
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="vehicle-type">
                   Vehicle Type *
                 </label>
 
                 <select
-                  name="type"
-                  value={form.type}
-                  onChange={handleInputChange}
+                  id="vehicle-type"
+                  value={vehicleType}
+                  onChange={(e) =>
+                    setVehicleType(e.target.value)
+                  }
                 >
-                  <option value="">
-                    Select vehicle type
-                  </option>
-
-                  <option value="car">
-                    Car
-                  </option>
-
-                  <option value="SUV">
-                    SUV
-                  </option>
-
-                  <option value="HiAce">
-                    HiAce
-                  </option>
+                  <option value="car">Car</option>
+                  <option value="SUV">SUV</option>
+                  <option value="HiAce">HiAce</option>
                 </select>
               </div>
 
+              {/* REGISTRATION */}
+
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="registration-number">
+                  Registration Number *
+                </label>
+
+                <input
+                  id="registration-number"
+                  type="text"
+                  placeholder="e.g. DHAKA-1234"
+                  value={registrationNumber}
+                  onChange={(e) =>
+                    setRegistrationNumber(
+                      e.target.value
+                    )
+                  }
+                  required
+                />
+              </div>
+
+              {/* AC TYPE */}
+
+              <div className="vehicle-form-group">
+                <label htmlFor="ac-type">
                   AC Type *
                 </label>
 
                 <select
-                  name="ac_type"
-                  value={form.ac_type}
-                  onChange={handleInputChange}
+                  id="ac-type"
+                  value={acType}
+                  onChange={(e) =>
+                    setAcType(e.target.value)
+                  }
                 >
-                  <option value="">
-                    Select AC type
-                  </option>
-
-                  <option value="AC">
-                    AC
-                  </option>
-
+                  <option value="AC">AC</option>
                   <option value="Non-AC">
                     Non-AC
                   </option>
                 </select>
               </div>
 
+              {/* SEATS */}
+
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="total-seats">
                   Total Seats *
                 </label>
 
                 <input
+                  id="total-seats"
                   type="number"
                   min="1"
-                  name="total_seats"
-                  value={form.total_seats}
-                  onChange={handleInputChange}
                   placeholder="e.g. 5"
+                  value={totalSeats}
+                  onChange={(e) =>
+                    setTotalSeats(e.target.value)
+                  }
+                  required
                 />
               </div>
 
+              {/* FUEL */}
+
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="fuel-type">
                   Fuel Type *
                 </label>
 
                 <select
-                  name="fuel_type"
-                  value={form.fuel_type}
-                  onChange={handleInputChange}
+                  id="fuel-type"
+                  value={fuelType}
+                  onChange={(e) =>
+                    setFuelType(e.target.value)
+                  }
                 >
-                  <option value="">
-                    Select fuel type
-                  </option>
-
                   <option value="Petrol">
                     Petrol
                   </option>
@@ -836,54 +623,65 @@ const VehicleManagement = ({
                 </select>
               </div>
 
+              {/* SUITCASE */}
+
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="suitcase-capacity">
                   Suitcase Capacity *
                 </label>
 
                 <input
+                  id="suitcase-capacity"
                   type="number"
                   min="0"
-                  name="suitcase_capacity"
-                  value={
-                    form.suitcase_capacity
+                  placeholder="e.g. 5"
+                  value={suitcaseCapacity}
+                  onChange={(e) =>
+                    setSuitcaseCapacity(
+                      e.target.value
+                    )
                   }
-                  onChange={handleInputChange}
-                  placeholder="e.g. 3"
+                  required
                 />
               </div>
 
+              {/* DAILY RENT */}
+
               <div className="vehicle-form-group">
-                <label>
-                  Daily Rent Price *
+                <label htmlFor="daily-rent-price">
+                  Daily Rent Price (৳) *
                 </label>
 
                 <input
+                  id="daily-rent-price"
                   type="number"
-                  min="1"
-                  name="daily_rent_price"
-                  value={
-                    form.daily_rent_price
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 350"
+                  value={dailyRentPrice}
+                  onChange={(e) =>
+                    setDailyRentPrice(
+                      e.target.value
+                    )
                   }
-                  onChange={handleInputChange}
-                  placeholder="e.g. 3500"
+                  required
                 />
               </div>
 
+              {/* CITY */}
+
               <div className="vehicle-form-group">
-                <label>
+                <label htmlFor="city">
                   City *
                 </label>
 
                 <select
-                  name="city"
-                  value={form.city}
-                  onChange={handleInputChange}
+                  id="city"
+                  value={city}
+                  onChange={(e) =>
+                    setCity(e.target.value)
+                  }
                 >
-                  <option value="">
-                    Select city
-                  </option>
-
                   <option value="Dhaka">
                     Dhaka
                   </option>
@@ -898,38 +696,42 @@ const VehicleManagement = ({
                 </select>
               </div>
 
+              {/* IMAGE */}
+
               <div className="vehicle-form-group vehicle-image-group">
-                <label>
+                <label htmlFor="vehicle-image">
                   Vehicle Image *
                 </label>
 
                 <input
+                  id="vehicle-image"
                   type="file"
-                  accept=".jpg,.jpeg,.png,.webp"
-                  required
+                  accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
                   onChange={handleImageChange}
+                  required
                 />
 
-                <small className="vehicle-image-help">
-                  Supported formats: JPG, JPEG, PNG,
-                  WEBP • Maximum size: 5 MB
-                </small>
+                <div className="vehicle-image-help">
+                  JPG, JPEG, PNG or WEBP. Maximum size
+                  5 MB.
+                </div>
 
-                {form.image && (
-                  <span className="vehicle-file-name">
-                    {form.image.name}
-                  </span>
+                {vehicleImage && (
+                  <div className="vehicle-file-name">
+                    Selected: {vehicleImage.name}
+                  </div>
                 )}
               </div>
-
             </div>
 
-            <div className="vehicle-form-actions">
+            {/* FORM ACTIONS */}
 
+            <div className="vehicle-form-actions">
               <button
                 type="button"
                 className="vehicle-reset-button"
                 onClick={resetForm}
+                disabled={saving}
               >
                 Reset
               </button>
@@ -943,464 +745,188 @@ const VehicleManagement = ({
                   ? "Adding Vehicle..."
                   : "Add Vehicle"}
               </button>
-
             </div>
-
           </form>
         </div>
       )}
 
       {/* =========================
-          VIEW ALL VEHICLES
+          VIEW VEHICLES
       ========================= */}
 
       {activeTab === "view" && (
         <div className="vehicle-section-card">
-
           <div className="vehicle-section-header">
             <div>
               <h3>All Vehicles</h3>
 
               <p>
-                View all vehicles currently registered
-                in Rentwise.
+                View all vehicles currently registered in
+                the Rentwise system.
               </p>
             </div>
 
             <button
               type="button"
               className="vehicle-close-button"
-              onClick={() =>
-                setActiveTab("none")
-              }
+              onClick={() => {
+                setActiveTab("none");
+                setMessage("");
+                setError("");
+              }}
             >
               ×
             </button>
           </div>
+
+          {/* LOADING */}
 
           {loadingVehicles ? (
             <div className="vehicle-loading">
               <div className="vehicle-loading-spinner"></div>
 
-              <p>
-                Loading vehicles...
-              </p>
+              <p>Loading vehicles...</p>
             </div>
           ) : vehicles.length === 0 ? (
+            /* EMPTY */
+
             <div className="vehicle-view-empty">
               <div className="vehicle-view-empty-icon">
                 🚗
               </div>
 
-              <h3>
-                No Vehicles Found
-              </h3>
+              <h3>No Vehicles Found</h3>
 
               <p>
-                There are currently no vehicles
-                registered in Rentwise.
+                There are currently no vehicles registered
+                in the system.
               </p>
             </div>
           ) : (
-            <div className="vehicle-table-wrapper">
+            /* TABLE */
 
-              <table className="vehicle-table">
+            <>
+              <div className="vehicle-table-wrapper">
+                <table className="vehicle-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Vehicle</th>
+                      <th>Type</th>
+                      <th>Registration</th>
+                      <th>AC</th>
+                      <th>Seats</th>
+                      <th>Fuel</th>
+                      <th>Suitcase</th>
+                      <th>Daily Rent</th>
+                      <th>City</th>
+                      <th>Status</th>
+                      <th>Added</th>
+                    </tr>
+                  </thead>
 
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Vehicle</th>
-                    <th>Type</th>
-                    <th>Registration</th>
-                    <th>AC</th>
-                    <th>Seats</th>
-                    <th>Fuel</th>
-                    <th>Suitcase</th>
-                    <th>Daily Rent</th>
-                    <th>City</th>
-                    <th>Status</th>
-                    <th>Added</th>
-                  </tr>
-                </thead>
+                  <tbody>
+                    {vehicles.map((vehicle) => (
+                      <tr key={vehicle.id}>
+                        {/* ID */}
 
-                <tbody>
-                  {vehicles.map((vehicle) => (
-                    <tr key={vehicle.id}>
+                        <td>{vehicle.id}</td>
 
-                      <td>
-                        #{vehicle.id}
-                      </td>
+                        {/* VEHICLE */}
 
-                      <td>
-                        <strong className="vehicle-table-name">
-                          {vehicle.vehicle_name}
-                        </strong>
-                      </td>
+                        <td>
+                          <span className="vehicle-table-name">
+                            {vehicle.vehicle_name}
+                          </span>
+                        </td>
 
-                      <td>
-                        {vehicle.type}
-                      </td>
+                        {/* TYPE */}
 
-                      <td>
-                        <span className="vehicle-registration">
-                          {vehicle.registration_number}
-                        </span>
-                      </td>
+                        <td>{vehicle.type}</td>
 
-                      <td>
-                        {vehicle.ac_type}
-                      </td>
+                        {/* REGISTRATION */}
 
-                      <td>
-                        {vehicle.total_seats}
-                      </td>
+                        <td>
+                          <span className="vehicle-registration">
+                            {
+                              vehicle.registration_number
+                            }
+                          </span>
+                        </td>
 
-                      <td>
-                        {vehicle.fuel_type}
-                      </td>
+                        {/* AC */}
 
-                      <td>
-                        {vehicle.suitcase_capacity}
-                      </td>
+                        <td>{vehicle.ac_type}</td>
 
-                      <td>
-                        <strong>
+                        {/* SEATS */}
+
+                        <td>{vehicle.total_seats}</td>
+
+                        {/* FUEL */}
+
+                        <td>{vehicle.fuel_type}</td>
+
+                        {/* SUITCASE */}
+
+                        <td>
+                          {vehicle.suitcase_capacity}
+                        </td>
+
+                        {/* DAILY RENT */}
+
+                        <td>
                           ৳{" "}
                           {Number(
                             vehicle.daily_rent_price
-                          ).toLocaleString(
-                            "en-BD",
-                            {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }
+                          ).toLocaleString("en-BD", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </td>
+
+                        {/* CITY */}
+
+                        <td>{vehicle.city}</td>
+
+                        {/* STATUS */}
+
+                        <td>
+                          <span
+                            className={`vehicle-table-status ${getStatusClass(
+                              vehicle.availability_status
+                            )}`}
+                          >
+                            <span className="vehicle-status-dot"></span>
+
+                            {getStatusText(
+                              vehicle.availability_status
+                            )}
+                          </span>
+                        </td>
+
+                        {/* ADDED */}
+
+                        <td>
+                          {formatDate(
+                            vehicle.created_at
                           )}
-                        </strong>
-                      </td>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
-                      <td>
-                        {vehicle.city}
-                      </td>
+              {/* TABLE FOOTER */}
 
-                      <td>
-                        <span
-                          className={`vehicle-table-status ${getStatusClass(
-                            vehicle.availability_status
-                          )}`}
-                        >
-                          <span className="vehicle-status-dot"></span>
-
-                          {getStatusText(
-                            vehicle.availability_status
-                          )}
-                        </span>
-                      </td>
-
-                      <td>
-                        {formatDate(
-                          vehicle.created_at
-                        )}
-                      </td>
-
-                    </tr>
-                  ))}
-                </tbody>
-
-              </table>
-
-            </div>
-          )}
-
-          {!loadingVehicles &&
-            vehicles.length > 0 && (
               <div className="vehicle-table-footer">
-                <span>
-                  Total Vehicles:{" "}
-                  <strong>
-                    {vehicles.length}
-                  </strong>
-                </span>
+                Total Vehicles:{" "}
+                <strong>{vehicles.length}</strong>
               </div>
-            )}
-
+            </>
+          )}
         </div>
       )}
-
-      {/* =========================
-          MAINTENANCE
-      ========================= */}
-
-      {activeTab === "manage" && (
-        <div className="vehicle-section-card">
-
-          <div className="vehicle-section-header">
-            <div>
-              <h3>Manage Vehicles</h3>
-
-              <p>
-                Search a vehicle by registration
-                number and check its availability
-                for a specific time.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              className="vehicle-close-button"
-              onClick={() =>
-                setActiveTab("none")
-              }
-            >
-              ×
-            </button>
-          </div>
-
-          <form
-            className="vehicle-search-form"
-            onSubmit={handleSearchVehicle}
-          >
-
-            <div className="vehicle-search-field">
-              <label>
-                Registration Number *
-              </label>
-
-              <input
-                type="text"
-                value={searchRegistration}
-                onChange={(e) =>
-                  setSearchRegistration(
-                    e.target.value
-                  )
-                }
-                placeholder="Enter registration number"
-              />
-            </div>
-
-            <div className="vehicle-search-field">
-              <label>Date *</label>
-
-              <input
-                type="date"
-                value={searchDate}
-                onChange={(e) =>
-                  setSearchDate(e.target.value)
-                }
-              />
-            </div>
-
-            <div className="vehicle-search-field">
-              <label>Start Time *</label>
-
-              <input
-                type="time"
-                value={searchStartTime}
-                onChange={(e) =>
-                  setSearchStartTime(
-                    e.target.value
-                  )
-                }
-              />
-            </div>
-
-            <div className="vehicle-search-field">
-              <label>End Time *</label>
-
-              <input
-                type="time"
-                value={searchEndTime}
-                onChange={(e) =>
-                  setSearchEndTime(
-                    e.target.value
-                  )
-                }
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="vehicle-search-button"
-              disabled={searching}
-            >
-              {searching
-                ? "Searching..."
-                : "Search Vehicle"}
-            </button>
-
-          </form>
-
-          {searchResult && (
-            <div className="vehicle-search-result">
-
-              <div className="vehicle-result-header">
-
-                <div>
-                  <h3>
-                    {
-                      searchResult.vehicle
-                        .vehicle_name
-                    }
-                  </h3>
-
-                  <p>
-                    {
-                      searchResult.vehicle
-                        .registration_number
-                    }
-                  </p>
-                </div>
-
-                <span
-                  className={`vehicle-status ${
-                    searchResult.available
-                      ? "available"
-                      : "booked"
-                  }`}
-                >
-                  {searchResult.available
-                    ? "Available"
-                    : "Unavailable"}
-                </span>
-
-              </div>
-
-              <div className="vehicle-result-details">
-
-                <div>
-                  <span>Type</span>
-
-                  <strong>
-                    {searchResult.vehicle.type}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>AC Type</span>
-
-                  <strong>
-                    {
-                      searchResult.vehicle
-                        .ac_type
-                    }
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Seats</span>
-
-                  <strong>
-                    {
-                      searchResult.vehicle
-                        .total_seats
-                    }
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Fuel</span>
-
-                  <strong>
-                    {
-                      searchResult.vehicle
-                        .fuel_type
-                    }
-                  </strong>
-                </div>
-
-                <div>
-                  <span>City</span>
-
-                  <strong>
-                    {
-                      searchResult.vehicle.city
-                    }
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Current Status</span>
-
-                  <strong
-                    className={`result-status ${getStatusClass(
-                      searchResult.vehicle
-                        .availability_status
-                    )}`}
-                  >
-                    {getStatusText(
-                      searchResult.vehicle
-                        .availability_status
-                    )}
-                  </strong>
-                </div>
-
-              </div>
-
-              <div className="vehicle-maintenance-info">
-
-                <div>
-                  <strong>
-                    Selected Maintenance Period
-                  </strong>
-
-                  <p>
-                    {searchDate} &nbsp;
-                    {searchStartTime}
-                    {" — "}
-                    {searchEndTime}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  className="vehicle-maintenance-button"
-                  disabled={
-                    !searchResult.available ||
-                    maintenanceLoading
-                  }
-                  onClick={
-                    handleSendToMaintenance
-                  }
-                >
-                  {maintenanceLoading
-                    ? "Scheduling..."
-                    : "Send to Maintenance"}
-                </button>
-
-              </div>
-
-              {searchResult.message && (
-                <div className="vehicle-result-message">
-                  {searchResult.message}
-                </div>
-              )}
-
-            </div>
-          )}
-
-          {!searchResult && !searching && (
-            <div className="vehicle-search-empty">
-
-              <div className="vehicle-search-empty-icon">
-                ⌕
-              </div>
-
-              <h3>
-                Search for a Vehicle
-              </h3>
-
-              <p>
-                Enter a registration number and
-                select the date and time to check
-                whether the vehicle is available
-                for maintenance.
-              </p>
-
-            </div>
-          )}
-
-        </div>
-      )}
-
     </div>
   );
 };
